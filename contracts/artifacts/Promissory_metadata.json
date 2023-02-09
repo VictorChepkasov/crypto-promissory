@@ -69,6 +69,11 @@
 								"type": "string"
 							},
 							{
+								"internalType": "uint8",
+								"name": "promissoryCommission",
+								"type": "uint8"
+							},
+							{
 								"internalType": "uint256",
 								"name": "promissoryAmount",
 								"type": "uint256"
@@ -179,6 +184,11 @@
 						"type": "string"
 					},
 					{
+						"internalType": "uint8",
+						"name": "_promissoryCommission",
+						"type": "uint8"
+					},
+					{
 						"internalType": "uint256",
 						"name": "_promissoryAmount",
 						"type": "uint256"
@@ -232,11 +242,11 @@
 	},
 	"sources": {
 		"contracts/promissory.sol": {
-			"keccak256": "0x685976b46a38cdc595db2b552124cbe7212f6e079f504819a6388698a98d3876",
+			"keccak256": "0xb560f9b94bcd0e7ce029652d043cd6be82ef365ffe741cd7d702b391f1b404da",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e6c1a254691ce56b2000b1a7d381f9c9dba8af27c461362415aa1f1994009161",
-				"dweb:/ipfs/QmUsWsCgVTpqo2WHxSxcN9mfH5Tr9eHXLdYYet5CvYSn9D"
+				"bzz-raw://d785587a8e56bf67525585b1978cdf749fb8b9f05c077ca50e8632220b8ac61a",
+				"dweb:/ipfs/QmeCoXhCXRz6nFu9KgDwSbg2HYUA68Ga4QhNyisTpVMXnZ"
 			]
 		}
 	},

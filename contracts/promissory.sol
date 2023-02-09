@@ -18,8 +18,8 @@ contract Promissory {
         string holderName; //имя векселедержателем
         string debtorName; //имя векселедателя
 
-        //uint8 promissoryInterestRate; - позже добавим и посчитаем, типы данных разные! Аккуратнее
-        //uint256 totalPromissoryAmount; //сумма, которую должник должен вернуть
+        uint8 promissoryCommission; //коммисия(в процентах), которая добавится к сумме долга 
+
         uint256 promissoryAmount; //сумма, нужная должнику
         uint256 dateOfRegistration; //дата составления векселя
         uint256 dateOfClose; //дата погашения векселя
@@ -41,13 +41,15 @@ contract Promissory {
     function setPromissoryInfo(
         address payable _debtor,
         string memory _debtorName,
+        uint8 _promissoryCommission,
         uint256 _promissoryAmount,
         uint256 _dateOfRegistration,
         uint256 _dateOfClose) public {
             require(_debtor != promissory.holder, "Debtor and Holder must be different peoples");
             promissory.debtor = _debtor;
             promissory.debtorName = _debtorName;
-            promissory.promissoryAmount = _promissoryAmount;
+            promissory.promissoryCommission = _promissoryCommission;
+            promissory.promissoryAmount = _promissoryAmount + (_promissoryAmount / 100) * promissory.promissoryCommission;
             promissory.dateOfRegistration = _dateOfRegistration;
             promissory.dateOfClose = _dateOfClose;
     }

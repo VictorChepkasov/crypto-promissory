@@ -1,0 +1,244 @@
+{
+	"compiler": {
+		"version": "0.8.15+commit.e14f2714"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_holderName",
+						"type": "string"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "bank",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "dateOfAcceptance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPromissoryInfo",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "holder",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "debtor",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "holderName",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "debtorName",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "promissoryAmount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "dateOfRegistration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "dateOfClose",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "dateOfHolderConsent",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "dateOfDebtorConsent",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "holderConsent",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "debtorConsent",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct Promissory.PromissoryInfo",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "payPromissory",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "paymentAccepted",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "promissoryPaid",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "setDebtorConsent",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "setHolderConsent",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "setPaymentAccepted",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address payable",
+						"name": "_debtor",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "_debtorName",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_promissoryAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_dateOfRegistration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_dateOfClose",
+						"type": "uint256"
+					}
+				],
+				"name": "setPromissoryInfo",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/promissory.sol": "Promissory"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/promissory.sol": {
+			"keccak256": "0x685976b46a38cdc595db2b552124cbe7212f6e079f504819a6388698a98d3876",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e6c1a254691ce56b2000b1a7d381f9c9dba8af27c461362415aa1f1994009161",
+				"dweb:/ipfs/QmUsWsCgVTpqo2WHxSxcN9mfH5Tr9eHXLdYYet5CvYSn9D"
+			]
+		}
+	},
+	"version": 1
+}

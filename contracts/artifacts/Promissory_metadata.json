@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.15+commit.e14f2714"
+		"version": "0.8.7+commit.e28d00a7"
 	},
 	"language": "Solidity",
 	"output": {
@@ -15,19 +15,6 @@
 				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
-			},
-			{
-				"inputs": [],
-				"name": "bank",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -69,9 +56,9 @@
 								"type": "string"
 							},
 							{
-								"internalType": "uint8",
+								"internalType": "uint256",
 								"name": "promissoryCommission",
-								"type": "uint8"
+								"type": "uint256"
 							},
 							{
 								"internalType": "uint256",
@@ -242,11 +229,11 @@
 	},
 	"sources": {
 		"contracts/promissory.sol": {
-			"keccak256": "0xb560f9b94bcd0e7ce029652d043cd6be82ef365ffe741cd7d702b391f1b404da",
+			"keccak256": "0x3a7f7e5ed6ca76ec8e4c92cbe6788c547fa0b14e66a387b2bdc4d4d0d724816c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d785587a8e56bf67525585b1978cdf749fb8b9f05c077ca50e8632220b8ac61a",
-				"dweb:/ipfs/QmeCoXhCXRz6nFu9KgDwSbg2HYUA68Ga4QhNyisTpVMXnZ"
+				"bzz-raw://83ce0a5aa20c3a816beac13b17c592c2f91563c81b6442599f84eaba0a969823",
+				"dweb:/ipfs/Qmark7hT927tox8TeFQVAnbMp8x6DVLVbsrVu3KBwMZnfd"
 			]
 		}
 	},

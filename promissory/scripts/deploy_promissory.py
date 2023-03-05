@@ -1,15 +1,15 @@
 from brownie import Promissory, accounts
 from scripts.createjson import createMetadata
 
-holder = accounts[0]
+holder = accounts.load("victor")
 
 def deploy_contract():
-    promissory_deploy_contract = Promissory.deploy('Victor', {'from': holder, 'priority_fee':'100 gwei'})
+    promissory_deploy_contract = Promissory.deploy('Victor', {'from': holder, 'priority_fee': '1 wei'})
     print(f'contract deployed at {promissory_deploy_contract}')
     
     return promissory_deploy_contract
 
-def getPromissoryInfo():
+def getPromissoryInfoArr():
     promissory_info = deploy_contract().getPromissoryInfo({'from': holder})
 
     #clean promissory info
@@ -20,7 +20,7 @@ def getPromissoryInfo():
     return promissory_info
 
 def main():
-    promissoryInfoArr = getPromissoryInfo().split(', ')
+    promissoryInfoArr = getPromissoryInfoArr().split(', ')
 
     # print promissory info
     print('Holder address:', promissoryInfoArr[0])

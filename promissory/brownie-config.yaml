@@ -1,3 +1,4 @@
+dotenv: .env
 autofetch_sources: true
 compiler:
   solc:

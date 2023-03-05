@@ -1,61 +1,53 @@
-import json
-
-def createMetadata(promissoryInfoArr):
-    dict = {
+{
     "name": "NFT id - promissory number",
     "attributes": [
         {
             "trait_type": "holder address",
-            "value": promissoryInfoArr[0]
+            "value": "0xB9a459a00855B0b82337E692D078d7292609701C"
         },
         {
             "trait_type": "debtor address",
-            "value": promissoryInfoArr[1]
+            "value": "0x0000000000000000000000000000000000000000"
         },
         {
             "trait_type": "holder name",
-            "value": promissoryInfoArr[2]
+            "value": "Victor"
         },
         {
             "trait_type": "debtor name",
-            "value": promissoryInfoArr[3]
+            "value": ""
         },
         {
             "trait_type": "commission in percents",
-            "value": promissoryInfoArr[4]
+            "value": "0"
         },
         {
             "trait_type": "amount",
-            "value": promissoryInfoArr[5]
+            "value": "0"
         },
         {
             "trait_type": "date of registration",
-            "value": promissoryInfoArr[6]
+            "value": "0"
         },
         {
             "trait_type": "date of close",
-            "value": promissoryInfoArr[7]
+            "value": "0"
         },
         {
             "trait_type": "date of holder consent",
-            "value": promissoryInfoArr[8]
+            "value": "0"
         },
         {
             "trait_type": "date of debtor consent",
-            "value": promissoryInfoArr[9]
+            "value": "0"
         },
         {
             "trait_type": "holder consent",
-            "value": promissoryInfoArr[10]
+            "value": "False"
         },
         {
             "trait_type": "debtor consent",
-            "value": promissoryInfoArr[11]
+            "value": "False"
         }
-        ]
-    }
-
-    promissory_metadata = json.dumps(dict, indent=4)
-
-    with open("./scripts/nft_metadata/promissory_metadata.json", "w") as outfile:
-        outfile.write(promissory_metadata)
+    ]
+}

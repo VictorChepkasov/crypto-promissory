@@ -16,9 +16,6 @@ contract Promissory {
         address payable holder; //адрес кошелька векселедержателем
         address debtor; //адрес кошелька векселедателя
 
-        string holderName; //имя векселедержателем
-        string debtorName; //имя векселедателя
-
         uint256 promissoryCommission; //коммисия(в процентах), которая добавится к сумме долга 
         uint256 promissoryAmount; //сумма, нужная должнику
         uint256 dateOfRegistration; //дата составления векселя
@@ -32,9 +29,8 @@ contract Promissory {
 
     PromissoryInfo private promissory;
 
-    constructor(string memory _holderName) {
+    constructor() {
         promissory.holder = payable(msg.sender);
-        promissory.holderName = _holderName;
     }
 
     //записываем информацию по векселю 
@@ -47,7 +43,6 @@ contract Promissory {
         uint256 _dateOfClose) public {
             require(_debtor != promissory.holder, "Debtor and Holder must be different persons");
             promissory.debtor = _debtor;
-            promissory.debtorName = _debtorName;
             promissory.promissoryCommission = _promissoryCommission;
             promissory.promissoryAmount = _promissoryAmount + (_promissoryAmount / 100) * promissory.promissoryCommission;
             promissory.dateOfRegistration = _dateOfRegistration;

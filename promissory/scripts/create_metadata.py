@@ -1,8 +1,9 @@
 import requests
 import os
 import json
-
-from scripts.deploy_promissory import getPromissoryInfoArr
+from brownie import (
+    Promissory, accounts, config
+)
 
 metadata_template = {
     "name": "",
@@ -52,6 +53,7 @@ metadata_template = {
 
 def main():
     create_metadata(1)
+    print('Metadata created success!')
 
 def create_metadata(i):
     # разворачиваем контракт и получаем инфу о нём
@@ -89,8 +91,6 @@ def create_metadata(i):
  
     return metadata_hashes
 
-
-
 def upload_to_ipfs(data):
     pinata_api_jwt = os.environ.get("PINATA_API_JWT")
     print(pinata_api_jwt)
@@ -117,3 +117,14 @@ def upload_to_ipfs(data):
     
     # возвращаем хэш ipfs, где хранятся все нужные данные
     return hashh
+
+def getPromissoryInfoArr():
+    holder = accounts.load("victor")
+    deployed_contract = Promissory[-1]
+    promissory_info = deployed_contract.getPromissoryInfo({'from': holder})
+
+    #clean promissory info
+    chars = "()''"
+    promissory_info = str(promissory_info).translate(str.maketrans('', '', chars))
+
+    return promissory_info

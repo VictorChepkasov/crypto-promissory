@@ -8,24 +8,24 @@ from brownie import (
 from scripts.WaterCollection.create_metadata import write_metadata
 
 def main():
-    # Get our account info
+    # получаем информацию о нашей учетной записи
     dev = accounts.add(config['wallets']['from_key'])
-		# Get the most recent deployment of our contract
+		# получаем самое последнее развертывание нашего контракта
     water_collection = WaterCollection[-1]
-		# Check the number of currently minted tokens
+		# проверяем количество отчеканенных на данный момент токенов
     existing_tokens = water_collection.tokenCounter()
     print(existing_tokens)
-    # Check if we'eve already got our metadata hashes ready
+    # проверяем, готовы ли уже хэши метаданных
     if Path(f"metadata/data.json").exists():
         print("Metadata already exists. Skipping...")
         meta_data_hashes = json.load(open(f"metadata/data.json"))
     else:
         meta_data_hashes = write_metadata(100)
     for token_id in range(existing_tokens, 100):
-        # Get the metadata hash for this token's URI
+        # получаем хэш метаданных для URI этого токена
         meta_data_hash = meta_data_hashes[token_id]
-        # Call our createCollectible function to mint a token
+        # вызываем нашу функцию createCollectible, чтобы создать токен
         transaction = water_collection.createCollectible(
             meta_data_hash, {'from': dev,  "gas_limit": 2074044, "allow_revert": True})
-    # Wait for 3 blocks to be created atop our transactions
+    # ждём, пока будут созданы 3 блока поверх наших транзакций.
     transaction.wait(3)

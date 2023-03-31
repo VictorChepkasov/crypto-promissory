@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 > NOTE: With Rinkeby and Kovan being deprecated, the new default is goerli. 
 
 # chainlink-mix
@@ -289,3 +290,15 @@ Any questions? Join our [Discord](https://discord.gg/2YHSAey)
 ## License
 
 This project is licensed under the [MIT license](LICENSE).
+=======
+# Crypto promissory
+Electronic version of bills. Powered by Ethereum and Brownie.  
+
+# Stack
+- Python
+  - Brownie 
+- Solidity  
+  - OpenZeppelin
+- Metamsk
+- Infura
+>>>>>>> origin/HEAD

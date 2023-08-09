@@ -54,3 +54,4 @@ reports:
     - SafeMath
 wallets:
   from_key: ${PRIVATE_KEY}
+  debtor_key: ${PRIVATE_DEBTOR_KEY}

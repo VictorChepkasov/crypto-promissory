@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-// import "solidity-json-writer/contracts/JsonWriter.sol";
-
 contract Promissory {
     bool public promissoryPaid = false;
     bool public paymentAccepted = false;
@@ -20,7 +18,7 @@ contract Promissory {
         uint256 promissoryAmount; //сумма, нужная должнику
         uint256 dateOfRegistration; //дата составления векселя
         uint256 dateOfClose; //дата погашения векселя
-        uint256 dateOfHolderConsent; //дата согласия векселедержателем
+        uint256 dateOfHolderConsent; //дата согласия векселедержателя
         uint256 dateOfDebtorConsent; //дата согласия векселедателя
 
         bool holderConsent; //согласие векселедержателем
@@ -36,16 +34,14 @@ contract Promissory {
     //записываем информацию по векселю 
     function setPromissoryInfo(
         address payable _debtor,
-        // string memory _debtorName,
         uint8 _promissoryCommission,
         uint256 _promissoryAmount,
-        uint256 _dateOfRegistration,
         uint256 _dateOfClose) public {
             require(_debtor != promissory.holder, "Debtor and Holder must be different persons");
             promissory.debtor = _debtor;
             promissory.promissoryCommission = _promissoryCommission;
             promissory.promissoryAmount = _promissoryAmount + (_promissoryAmount / 100) * promissory.promissoryCommission;
-            promissory.dateOfRegistration = _dateOfRegistration;
+            promissory.dateOfRegistration = block.timestamp;
             promissory.dateOfClose = _dateOfClose;
     }
 

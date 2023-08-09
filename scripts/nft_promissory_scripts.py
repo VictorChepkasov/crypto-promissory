@@ -5,39 +5,39 @@ from scripts.create_metadata import create_metadata
 
 def main():
     holder = accounts.load('victor')
-    # deploy_promissory_nft(holder)
-    mint_promissry(holder)
+    deploy_promissory_nft(holder)
+    create_promissory(holder, accounts.add(config['wallets']['debtor_key']), 0, 1000, 1691694000)
 
 def deploy_promissory_nft(_from):
     promissoryNFT_deploy_contract = PromissoryNFT.deploy({
         "from": _from,
-        'priority_fee': '3 gwei'
+        'priority_fee': '2 gwei'
     }, publish_source=True)
     print(f"Promissory NFT deployed at {promissoryNFT_deploy_contract}")
     return promissoryNFT_deploy_contract
 
-def mint_promissry(_from):
+def create_promissory(_from, _debtor, _promissoryCommission, _promissoryAmount, _dateOfClose):
     promissory_collection = PromissoryNFT[-1]
     # проверяем количество отчеканенных на данный момент токенов
     existing_tokens = promissory_collection.tokenCounter()
     print(existing_tokens)
 
-    # проверяем, готовы ли уже хэши метаданных
-    if Path(f"./scripts/metadata/metadata_hashes.json").exists():
-        print("Metadata already exists. Skipping...")
-        metadata_hashes = json.load(open(f"./scripts/metadata/metadata_hashes.json"))
-    else:
-        metadata_hashes = create_metadata(1)
+    # вызываем нашу функцию createCollectible, чтобы создать контракт
+    promissory_collection.createCollectible(_debtor, _promissoryCommission, _promissoryAmount, _dateOfClose, {
+        'from': _from, 
+        "gas_limit": 2074045,
+        "allow_revert": True
+    }).wait(1)
 
-    for token_id in range(existing_tokens, 1):
-        # получаем хэш метаданных для URI этого токена
-        metadata_hash = metadata_hashes[token_id]
-        # вызываем нашу функцию createCollectible, чтобы создать токен
-        transaction = promissory_collection.createCollectible(metadata_hash, {
-            'from': _from, 
-            "gas_limit": 2074045,
-            "allow_revert": True
-        })
-    
+    # получаем хэш метаданных для URI этого токена
+    metadata_hash = create_metadata(_from)
+
+    # выпускаем токен
+    transaction = promissory_collection.mintCollectible(metadata_hash, {
+        'from': _from, 
+        'priority_fee': '3 gwei',
+        "allow_revert": True
+    })
     transaction.wait(3)
+    print('Token minted!')
 

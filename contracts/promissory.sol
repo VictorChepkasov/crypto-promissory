@@ -36,7 +36,7 @@ contract Promissory {
     //записываем информацию по векселю 
     function setPromissoryInfo(
         address payable _debtor,
-        string memory _debtorName,
+        // string memory _debtorName,
         uint8 _promissoryCommission,
         uint256 _promissoryAmount,
         uint256 _dateOfRegistration,
@@ -75,8 +75,7 @@ contract Promissory {
     function payPromissory() public payable onlyDebtor needConsent { 
         address payable debtor = payable(promissory.debtor);
         (bool success,) = debtor.call{value: promissory.promissoryAmount}("");
-        require(success);
-        
+        require(success, 'Failed call!');
         promissoryPaid = true;
     }
 
@@ -103,12 +102,12 @@ contract Promissory {
 
     //модификаторы
     modifier onlyHolder() {
-        require(msg.sender == promissory.holder, "Only the Holder can this!");
+        require(msg.sender == promissory.holder, "Only the Holder!");
         _;
     }
 
     modifier onlyDebtor() {
-        require(msg.sender == promissory.debtor, "Only the Debtor can this!");
+        require(msg.sender == promissory.debtor, "Only the Debtor!");
         _;
     }
 

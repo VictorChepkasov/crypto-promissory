@@ -1,9 +1,10 @@
 import requests
 import os
 import json
-from brownie import (
-    Promissory, accounts, config
-)
+from brownie import Promissory, accounts, config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 metadata_template = {
     "name": "",
@@ -52,14 +53,12 @@ metadata_template = {
     }
 
 def main():
-    create_metadata(1)
-    print('Metadata created success!')
+    create_metadata(1, accounts.add(config["wallets"]['from_key']))
 
-def create_metadata(i):
+def create_metadata(i, _from):
     # разворачиваем контракт и получаем инфу о нём
-    promissory_info = getPromissoryInfoArr().split(', ')
-
-    # Массив для хранения метаданных
+    promissory_info = get_promissory_info_arr(_from).split(', ')
+    # массив для хранения метаданных
     metadata_hashes = []
 
     for token_id in range(i):
@@ -70,7 +69,7 @@ def create_metadata(i):
         # имя токена = его id
         collectible_metadata["name"] = str(token_id)
 
-        # Сохраняем данные контракта в виде атрибутов
+        # сохраняем данные контракта в виде атрибутов
         for i in range(10):
             metadata_template["attributes"][i]["value"] = str(promissory_info[i])
 
@@ -82,46 +81,53 @@ def create_metadata(i):
         metadata_hash = upload_to_ipfs(collectible_metadata)
         metadata_path = f"<https://ipfs.io/ipfs/{metadata_hash}>"
  
-        # Добавить uri метаданные в массив
+        # добавить uri метаданные в массив
         metadata_hashes.append(metadata_path)
     
     with open('./scripts/metadata/data.json', 'w') as f:
-        # Наконец, мы запишем массив URI метаданных в файл
+        # запись массива URI метаданных в файл
         json.dump(metadata_hashes, f)
  
+    print('Metadata created success!')
     return metadata_hashes
 
 def upload_to_ipfs(data):
-    pinata_api_jwt = os.environ.get("PINATA_API_JWT")
-    print(pinata_api_jwt)
-
     endpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS"
+    # на случай, если понадобится работа JWT. В прошлый раз так всё работало
+    # pinata_api_jwt = os.environ.get("PINATA_API_JWT")
+    # headers = {
+        # 'Authorization': pinata_api_jwt,
+    # }
+    pinata_api_key = os.environ.get("PINATA_API_KEY")
+    pinata_secret_api_key = os.environ.get("PINATA_API_SECRET")
     headers = {
-        'Authorization': pinata_api_jwt,
+        'pinata_api_key': pinata_api_key,
+        'pinata_secret_api_key': pinata_secret_api_key
     }
-
     encode_data = json.dumps(data, indent=2).encode('utf-8')
-
-    print(f"Just data: {data}")
-    
+    print(f"Data for encode: {data}")
     files = {
         'file': encode_data
     }
 
     # запрос пин-кода в pinata
     response = requests.post(endpoint, headers=headers, files=files)
-    hashh = response.json()['IpfsHash']
-
-    print(f"Сам запрос{response.json()}")
-    print(f"Возвращаемое значение {hashh}")
+    print(f'Response: {response.json()}')
+    returned_hash_IPFS = response.json()['IpfsHash']
+    print(f"""
+          Response: {response.json()}
+          Returned value: {returned_hash_IPFS}
+          """)
     
     # возвращаем хэш ipfs, где хранятся все нужные данные
-    return hashh
+    return returned_hash_IPFS
 
-def getPromissoryInfoArr():
-    holder = accounts.load("victor")
+def get_promissory_info_arr(_from):
+    # holder = accounts.load("victor")
     deployed_contract = Promissory[-1]
-    promissory_info = deployed_contract.getPromissoryInfo({'from': holder})
+    promissory_info = deployed_contract.getPromissoryInfo({
+        'from': _from
+    })
 
     #clean promissory info
     chars = "()''"

@@ -11,7 +11,7 @@ contract PromissoryNFT is ERC721URIStorage {
         tokenCounter = 0;
     }
 
-    function mintToken(string memory tokenURI) public returns (bytes32) {
+    function mintToken(string memory tokenURI) public {
         uint256 tokenId = tokenCounter;
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenURI);
@@ -23,7 +23,6 @@ contract PromissoryNFT is ERC721URIStorage {
         _safeMint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, tokenUri);
         tokenCounter += 1;
-        
         return tokenCounter;
     }
 }

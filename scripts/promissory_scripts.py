@@ -19,6 +19,6 @@ def deploy_promissory(_from):
 
 def get_promissory_info(_from):
     promissory_info = Promissory[-1].getPromissoryInfo({'from':_from})
-    print(f'Ptomissory info: {promissory_info}')
+    print(f'Promissory info: {promissory_info}')
     return promissory_info
 

@@ -1,8 +1,9 @@
 import requests
 import os
 import json
-from brownie import Promissory, accounts, config
+from brownie import Promissory, PromissoryNFT, accounts, config
 from dotenv import load_dotenv
+from scripts.promissory_scripts import get_promissory_info
 
 load_dotenv()
 
@@ -53,25 +54,28 @@ metadata_template = {
     }
 
 def main():
-    create_metadata(1, accounts.add(config["wallets"]['from_key']))
+    create_metadata(3, accounts.add(config["wallets"]['from_key']))
 
 def create_metadata(i, _from):
     # разворачиваем контракт и получаем инфу о нём
-    promissory_info = get_promissory_info_arr(_from).split(', ')
+    promissory_info = get_promissory_info_arr(_from)
     # массив для хранения метаданных
     metadata_hashes = []
 
-    for token_id in range(i):
+    existing_tokens = PromissoryNFT[-1].tokenCounter()
+    print(existing_tokens)
+
+    for token_id in range(existing_tokens, i):
         # копируем шаблон метаданных
         collectible_metadata = metadata_template.copy()
         # имя файла метаданных
-        metadata_filename = f"./scripts/metadata/{token_id + 1}.json"
+        metadata_filename = f"./scripts/metadata/tokens/{token_id+1}.json"
         # имя токена = его id
-        collectible_metadata["name"] = str(token_id)
+        collectible_metadata["name"] = str(token_id+1)
 
         # сохраняем данные контракта в виде атрибутов
-        for i in range(10):
-            metadata_template["attributes"][i]["value"] = str(promissory_info[i])
+        for index in range(10):
+            metadata_template["attributes"][index]["value"] = str(promissory_info[index])
 
         with open(metadata_filename, "w") as f:
             # Запишите метаданные локально
@@ -81,10 +85,10 @@ def create_metadata(i, _from):
         metadata_hash = upload_to_ipfs(collectible_metadata)
         metadata_path = f"<https://ipfs.io/ipfs/{metadata_hash}>"
  
-        # добавить uri метаданные в массив
+        # добавить uri метаданных в массив
         metadata_hashes.append(metadata_path)
     
-    with open('./scripts/metadata/data.json', 'w') as f:
+    with open('./scripts/metadata/metadata_hashes.json', 'w') as f:
         # запись массива URI метаданных в файл
         json.dump(metadata_hashes, f)
  
@@ -123,14 +127,8 @@ def upload_to_ipfs(data):
     return returned_hash_IPFS
 
 def get_promissory_info_arr(_from):
-    # holder = accounts.load("victor")
-    deployed_contract = Promissory[-1]
-    promissory_info = deployed_contract.getPromissoryInfo({
-        'from': _from
-    })
-
+    promissory_info = get_promissory_info(_from)
     #clean promissory info
     chars = "()''"
-    promissory_info = str(promissory_info).translate(str.maketrans('', '', chars))
-
+    promissory_info = str(promissory_info).translate(str.maketrans('', '', chars)).split(', ')
     return promissory_info

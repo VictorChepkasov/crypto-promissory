@@ -4,7 +4,6 @@ from pathlib import Path
 from scripts.create_metadata import create_metadata
 
 def main():
-    # holder = accounts.add(config['wallets']['from_key'])
     holder = accounts.load('victor')
     # deploy_promissory_nft(holder)
     mint_promissry(holder)
@@ -24,9 +23,9 @@ def mint_promissry(_from):
     print(existing_tokens)
 
     # проверяем, готовы ли уже хэши метаданных
-    if Path(f"./scripts/metadata/data.json").exists():
+    if Path(f"./scripts/metadata/metadata_hashes.json").exists():
         print("Metadata already exists. Skipping...")
-        metadata_hashes = json.load(open(f"./scripts/metadata/data.json"))
+        metadata_hashes = json.load(open(f"./scripts/metadata/metadata_hashes.json"))
     else:
         metadata_hashes = create_metadata(1)
 

@@ -1,5 +1,4 @@
 from brownie import Promissory, accounts, config
-# from scripts.createjson import createMetadata
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,13 +11,14 @@ def main():
 def deploy_promissory(_from):
     promissoryContract = Promissory.deploy({
         'from': _from,
-        'priority_fee': '3 gwei'
+        'priority_fee': '10 wei'
     })
     print(f'Promissory deployed at {promissoryContract}')
     return promissoryContract
 
 def get_promissory_info(_from):
-    promissory_info = Promissory[-1].getPromissoryInfo({'from':_from})
+    promissory_info = Promissory[-1].getPromissoryInfo({
+        'from': _from
+    })
     print(f'Promissory info: {promissory_info}')
     return promissory_info
-

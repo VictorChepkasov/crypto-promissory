@@ -58,15 +58,16 @@ def main():
 def create_metadata(_from):
     # массив для хранения метаданных
     metadata_hashes = []
+    # кол-во выпущеных токенов
     existing_tokens = PromissoryNFT[-1].tokenCounter()
-    print(existing_tokens)
+    print(f'Existing tokens: {existing_tokens}')
     # копируем шаблон метаданных
     collectible_metadata = metadata_template.copy()
     # имя токена = его id
     collectible_metadata["name"] = str(existing_tokens)
 
     # получаем инфу о контракте
-    promissory_info = get_promissory_info_arr(_from, existing_tokens)
+    promissory_info = get_promissory_info(_from, existing_tokens)
     # сохраняем данные контракта в виде атрибутов
     for index in range(10):
         metadata_template["attributes"][index]["value"] = str(promissory_info[index])
@@ -79,17 +80,17 @@ def create_metadata(_from):
 
     # загрузка данных в ipfs(Pinata)
     metadata_hash = upload_to_ipfs(collectible_metadata)
-    metadata_path = f"<https://ipfs.io/ipfs/{metadata_hash}>"
+    metadata_uri = f"<https://ipfs.io/ipfs/{metadata_hash}>"
  
     # добавить uri метаданных в массив
-    metadata_hashes.append(metadata_path)
+    metadata_hashes.append(metadata_uri)
     
     with open('./scripts/metadata/metadata_hashes.json', 'w') as f:
         # запись массива URI метаданных в файл
         json.dump(metadata_hashes, f)
  
     print('Metadata created success!')
-    return metadata_path
+    return metadata_uri
 
 def upload_to_ipfs(data):
     endpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS"
@@ -104,18 +105,20 @@ def upload_to_ipfs(data):
     files = {
         'file': encode_data
     }
+
     # запрос пин-кода в pinata
     response = requests.post(endpoint, headers=headers, files=files)
     print(f'Response: {response.json()}')
     returned_hash_IPFS = response.json()['IpfsHash']
+
     # возвращаем хэш ipfs, где хранятся все нужные данные
     return returned_hash_IPFS
 
-def get_promissory_info_arr(_from, tokenId):
+def get_promissory_info(_from, tokenId):
     promissory_info = PromissoryNFT[-1].getPromissoryInfo(tokenId, {
         'from': _from
     })
-    # clean promissory info
+    # чистка promissory info
     chars = "()''"
     promissory_info = str(promissory_info).translate(str.maketrans('', '', chars)).split(', ')
     return promissory_info

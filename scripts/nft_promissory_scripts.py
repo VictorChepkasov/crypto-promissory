@@ -6,7 +6,7 @@ from scripts.create_metadata import create_metadata
 def main():
     holder = accounts.load('victor')
     # deploy_promissory_nft(holder)
-    create_promissory(holder, accounts.add(config['wallets']['debtor_key']), 0, 1000, 1691694666)
+    create_promissory(holder, accounts.add(config['wallets']['debtor_key']), 0, 1000, 1691694000)
 
 def deploy_promissory_nft(_from):
     promissoryNFT_deploy_contract = PromissoryNFT.deploy({
@@ -29,6 +29,8 @@ def create_promissory(_from, _debtor, _promissoryCommission, _promissoryAmount, 
         "allow_revert": True
     }).wait(1)
     print('Create collectible!')
+    existing_tokens = promissory_collection.tokenCounter()
+    print(f'Existing tokens: {existing_tokens}')
 
     # получаем хэш метаданных для URI этого токена
     metadata_uri = create_metadata(_from)

@@ -55,3 +55,4 @@ reports:
 wallets:
   from_key: ${PRIVATE_KEY}
   debtor_key: ${PRIVATE_DEBTOR_KEY}
+  debtor_2_key: ${PRIVATE_DEBTOR_2_KEY}

@@ -56,8 +56,6 @@ def main():
     create_metadata(accounts.add(config["wallets"]['from_key']))
 
 def create_metadata(_from):
-    # массив для хранения метаданных
-    metadata_hashes = []
     # кол-во выпущеных токенов
     existing_tokens = PromissoryNFT[-1].tokenCounter()
     print(f'Existing tokens: {existing_tokens}')
@@ -82,13 +80,9 @@ def create_metadata(_from):
     metadata_hash = upload_to_ipfs(collectible_metadata)
     metadata_uri = f"<https://ipfs.io/ipfs/{metadata_hash}>"
  
-    # добавить uri метаданных в массив
-    metadata_hashes.append(metadata_uri)
-    
-    with open('./scripts/metadata/metadata_hashes.json', 'w') as f:
-        # запись массива URI метаданных в файл
-        json.dump(metadata_hashes, f)
- 
+    # добавляем uri в json файл   
+    write_to_json(metadata_uri)
+
     print('Metadata created success!')
     return metadata_uri
 
@@ -122,3 +116,11 @@ def get_promissory_info(_from, tokenId):
     chars = "()''"
     promissory_info = str(promissory_info).translate(str.maketrans('', '', chars)).split(', ')
     return promissory_info
+
+def write_to_json(metadata_uri):
+    with open('./scripts/metadata/metadata_hashes.json', 'r') as f:
+        json_file = json.load(f)
+    with open('./scripts/metadata/metadata_hashes.json', 'w') as ff:
+        json_file.append(metadata_uri)
+        print(json_file)
+        json.dump(json_file, ff)

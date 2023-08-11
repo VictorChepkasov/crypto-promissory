@@ -17,9 +17,9 @@ contract PromissoryNFT is ERC721URIStorage {
         address payable _debtor,
         uint8 _promissoryCommission,
         uint256 _promissoryAmount,
-        uint256 _dateOfClose) public returns(uint256) {
-        Promissory promissory = new Promissory();
-        promissory.setPromissoryInfo(_debtor, _promissoryCommission, _promissoryAmount, _dateOfClose);
+        uint256 _dateOfClose
+        ) public returns(uint256) {
+        Promissory promissory = new Promissory(_debtor, _promissoryCommission, _promissoryAmount, _dateOfClose);
         
         tokenCounter += 1;
         promissories[tokenCounter] = promissory;

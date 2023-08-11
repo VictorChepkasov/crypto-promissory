@@ -8,8 +8,8 @@ def main():
     deploy_promissory(holder)
     get_promissory_info(holder)
 
-def deploy_promissory(_from):
-    promissoryContract = Promissory.deploy({
+def deploy_promissory(_from, _debtor, _promissoryCommission, _promissoryAmount, _dateOfClose):
+    promissoryContract = Promissory.deploy(_debtor, _promissoryCommission, _promissoryAmount, _dateOfClose, {
         'from': _from,
         'priority_fee': '10 wei'
     })

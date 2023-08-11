@@ -27,17 +27,14 @@ contract Promissory {
 
     PromissoryInfo private promissory;
 
-    constructor() {
-        promissory.holder = payable(msg.sender);
-    }
-
-    //записываем информацию по векселю 
-    function setPromissoryInfo(
+    constructor(
         address payable _debtor,
         uint8 _promissoryCommission,
         uint256 _promissoryAmount,
-        uint256 _dateOfClose) public {
-            require(_debtor != promissory.holder, "Debtor and Holder must be different persons");
+        uint256 _dateOfClose
+        ) {
+        promissory.holder = payable(msg.sender);
+        require(_debtor != promissory.holder, "Debtor and Holder must be different persons");
             promissory.debtor = _debtor;
             promissory.promissoryCommission = _promissoryCommission;
             promissory.promissoryAmount = _promissoryAmount + (_promissoryAmount / 100) * promissory.promissoryCommission;

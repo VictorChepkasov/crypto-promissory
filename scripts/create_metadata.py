@@ -1,7 +1,7 @@
 import requests
 import os
 import json
-from brownie import PromissoryNFT, accounts, config
+from brownie import PromissoryNFT, Promissory, accounts, config
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -66,6 +66,7 @@ def create_metadata(_from):
 
     # получаем инфу о контракте
     promissory_info = get_promissory_info(_from, existing_tokens)
+    print(f'Promissory info: {promissory_info}')
     # сохраняем данные контракта в виде атрибутов
     for index in range(10):
         metadata_template["attributes"][index]["value"] = str(promissory_info[index])
@@ -95,14 +96,13 @@ def upload_to_ipfs(data):
         'pinata_secret_api_key': pinata_secret_api_key
     }
     encode_data = json.dumps(data, indent=2).encode('utf-8')
-    print(f"Data for encode: {data}")
     files = {
         'file': encode_data
     }
 
     # запрос пин-кода в pinata
     response = requests.post(endpoint, headers=headers, files=files)
-    print(f'Response: {response.json()}')
+    # print(f'Response: {response.json()}')
     returned_hash_IPFS = response.json()['IpfsHash']
 
     # возвращаем хэш ipfs, где хранятся все нужные данные
@@ -110,12 +110,12 @@ def upload_to_ipfs(data):
 
 # получение инфы о векселе из фабрики
 def get_promissory_info(_from, tokenId):
-    promissory_info = PromissoryNFT[-1].getPromissoryInfo(tokenId, {
+    promissory_info = PromissoryNFT[-1].getPromissory(tokenId, {
         'from': _from
     })
+    promissory_info = Promissory.at(promissory_info).getPromissoryInfo({'from': _from})
     # чистка promissory info
-    chars = "()''"
-    promissory_info = str(promissory_info).translate(str.maketrans('', '', chars)).split(', ')
+    promissory_info = str(promissory_info).translate(str.maketrans('', '', "()''")).split(', ')
     return promissory_info
 
 # функция записи uri метаданных в json файл
@@ -124,5 +124,5 @@ def write_to_json(metadata_uri):
         json_file = json.load(f)
     with open('./scripts/metadata/metadata_hashes.json', 'w') as ff:
         json_file.append(metadata_uri)
-        print(json_file)
+        # print(json_file)
         json.dump(json_file, ff)

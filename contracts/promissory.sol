@@ -25,7 +25,7 @@ contract Promissory {
         bool debtorConsent; //согласие векселедателя
     }
 
-    PromissoryInfo private promissory;
+    PromissoryInfo public promissory;
 
     constructor(
         address payable _debtor,

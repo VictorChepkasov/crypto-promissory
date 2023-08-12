@@ -7,7 +7,7 @@ def main():
     # holder = accounts.add(config["wallets"]["from_key"])
     holder = accounts.load('victor')
     debtor = accounts.load('victor2')
-    deploy_promissory(holder, debtor, 10, 2000, 1692126000)
+    deploy_promissory(holder, debtor, 10, 200000, 1692126000)
     # get_promissory_info(holder)
     set_debtor_consent(debtor)
     set_holder_consent(holder)

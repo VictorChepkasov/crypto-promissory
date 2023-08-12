@@ -108,6 +108,7 @@ def upload_to_ipfs(data):
     # возвращаем хэш ipfs, где хранятся все нужные данные
     return returned_hash_IPFS
 
+# получение инфы о векселе из фабрики
 def get_promissory_info(_from, tokenId):
     promissory_info = PromissoryNFT[-1].getPromissoryInfo(tokenId, {
         'from': _from
@@ -117,6 +118,7 @@ def get_promissory_info(_from, tokenId):
     promissory_info = str(promissory_info).translate(str.maketrans('', '', chars)).split(', ')
     return promissory_info
 
+# функция записи uri метаданных в json файл
 def write_to_json(metadata_uri):
     with open('./scripts/metadata/metadata_hashes.json', 'r') as f:
         json_file = json.load(f)

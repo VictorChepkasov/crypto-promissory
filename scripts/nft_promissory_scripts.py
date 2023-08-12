@@ -1,6 +1,4 @@
 from brownie import PromissoryNFT, accounts, config
-# import json
-# from pathlib import Path
 from scripts.create_metadata import create_metadata
 
 def main():
@@ -22,7 +20,7 @@ def create_promissory(_from, _debtor, _promissoryCommission, _promissoryAmount, 
     existing_tokens = promissory_collection.tokenCounter()
     print(f'Existing tokens: {existing_tokens}')
 
-    # вызываем нашу функцию createCollectible, чтобы создать контракт
+    # вызываем нашу функцию createCollectible, чтобы создать контракт векселя 
     promissory_collection.createCollectible(_debtor, _promissoryCommission, _promissoryAmount, _dateOfClose, {
         'from': _from, 
         "gas_limit": 2074045,

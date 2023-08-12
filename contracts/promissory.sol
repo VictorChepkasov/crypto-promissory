@@ -66,23 +66,23 @@ contract Promissory {
 
     //оплата векселя
     function payPromissory() public payable onlyDebtor needConsent { 
-        address payable debtor = payable(promissory.debtor);
-        (bool success,) = debtor.call{value: promissory.promissoryAmount}("");
+        address payable holder = payable(promissory.holder);
+        (bool success,) = holder.call{value: msg.value}("");
         require(success, 'Failed call!');
         promissoryPaid = true;
     }
 
     //Принятие оплаты, что приводит к уничтожению контракта
     //(все еще должна быть функция, которая сжигает токен, когда это делается) 
-    function setPaymentAccepted() public onlyHolder promissoryWasPaid {
+    function setPaymentAccepted() public promissoryWasPaid {
         require(promissoryPaid == true, "You must pay the amount promissory");
         paymentAccepted = true;
         promissory.dateOfClose = block.timestamp;
         killContract();
     }
-
+    
     //уничтожение контракта после его заключения
-    function killContract() internal onlyHolder {
+    function killContract() internal {
         selfdestruct(promissory.holder);
     }
 

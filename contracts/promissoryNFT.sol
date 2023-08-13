@@ -18,7 +18,9 @@ contract PromissoryNFT is ERC721URIStorage {
         uint8 _promissoryCommission,
         uint256 _promissoryAmount,
         uint256 _dateOfClose
-        ) public returns(uint256) {
+    )
+        public returns(uint256)
+    {
         Promissory promissory = new Promissory(msg.sender, _debtor, _promissoryCommission, _promissoryAmount, _dateOfClose);
         
         tokenCounter += 1;
@@ -32,6 +34,10 @@ contract PromissoryNFT is ERC721URIStorage {
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenURI);
     } 
+
+    function burnCollectible(uint promissoryId) public {
+        
+    }
 
     function getPromissory(uint promissoryId) public view returns(Promissory) {
         // тут должна быть проверка на наличие контракта под определённым id

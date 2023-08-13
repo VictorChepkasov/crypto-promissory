@@ -40,9 +40,18 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     }).wait(3)
     print('Token minted!')
 
+# получение разрешения контракту передавать токен
+# _from - владелец токена
+# _to - лицо, которому даётся возможность управлять токеном
+# token_id - id токена
+def approve(_from, _to, token_id):
+    PromissoryNFT[-1].approve(_to, token_id, {
+        'from': _from,
+    })
+
 # Получение адреса контракта векселя по id, преобразовывается в ContractContainer через Contract.at(address)
-def get_promissory(_from, promissory_id):
-    info = PromissoryNFT[-1].getPromissory(promissory_id, {
+def get_promissory(_from, _to, promissory_id):
+    info = PromissoryNFT[-1].getPromissory(_to, promissory_id, {
         'from': _from
     })
     return info

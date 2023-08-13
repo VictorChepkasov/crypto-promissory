@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 contract Promissory {
     bool public promissoryPaid = false;
     bool public paymentAccepted = false;
-    uint256 public dateOfAcceptance;
+    bool public isExist;
 
     //данные векселя хранятся в этой структуре:
     struct PromissoryInfo {
@@ -37,6 +37,7 @@ contract Promissory {
             _debtor != promissory.holder, 
             "Debtor and Holder must be different persons"
         );
+        isExist = true;
         promissory.debtor = _debtor;
         promissory.promissoryCommission = _promissoryCommission;
         promissory.promissoryAmount = _promissoryAmount + (_promissoryAmount / 100) * promissory.promissoryCommission;
@@ -54,6 +55,10 @@ contract Promissory {
     //оплата векселя
     function payPromissory() public payable onlyDebtor needConsent { 
         address payable holder = payable(promissory.holder);
+        require(
+            msg.value == promissory.promissoryAmount,
+            "Incorrect msg.value!"
+        );
         (bool success,) = holder.call{value: msg.value}("");
         require(success, 'Failed call!');
         promissoryPaid = true;
@@ -65,7 +70,7 @@ contract Promissory {
         promissory.debtorConsent = true;
         promissory.dateOfDebtorConsent = block.timestamp;
         if (promissory.holderConsent == true) {
-            setDateOfRegistration();
+            _setDateOfRegistration();
         }
     }
 
@@ -73,7 +78,7 @@ contract Promissory {
         promissory.holderConsent = true;
         promissory.dateOfHolderConsent = block.timestamp;
         if (promissory.debtorConsent == true) {
-            setDateOfRegistration();
+            _setDateOfRegistration();
         }
     }
 
@@ -92,7 +97,7 @@ contract Promissory {
     }
 
     //обозначение даты регистрации
-    function setDateOfRegistration() private {
+    function _setDateOfRegistration() private {
         promissory.dateOfRegistration = block.timestamp;
     }
 

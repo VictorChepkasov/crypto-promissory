@@ -1,5 +1,5 @@
 # Crypto-promissory
-Registration of crypto-promissory. Выпуск nft при оформлении, хранение токена векселя в IPFS, transferring promissory note obligations and burning of the token upon redemption.  
+Registration of crypto-promissory. Issuing NFT at issuance, storing the promissory note token in IPFS, transferring promissory note obligations and burning of the token upon redemption.  
 
 Powered by Ethereum platform
 ## Developer stack

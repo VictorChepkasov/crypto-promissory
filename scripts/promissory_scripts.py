@@ -13,21 +13,15 @@ def main():
     set_holder_consent(holder)
     pay_promissory(debtor)
 
-def deploy_promissory(_from, _debtor, _promissoryCommission, _promissoryAmount, _dateOfClose):
-    promissoryContract = Promissory.deploy(_debtor, _promissoryCommission, _promissoryAmount, _dateOfClose, {
+def deploy_promissory(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
+    promissory_deployed = Promissory.deploy(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
         'from': _from,
         'priority_fee': '2 gwei'
     })
-    print(f'Promissory deployed at {promissoryContract}')
-    return promissoryContract
+    print(f'Promissory deployed at {promissory_deployed}')
+    return promissory_deployed
 
-def get_promissory_info(_from):
-    promissory_info = Promissory[-1].getPromissoryInfo({
-        'from': _from
-    })
-    print(f'Promissory info: {promissory_info}')
-    return promissory_info
-
+# получение соглашения от векселедержателя
 def set_holder_consent(_from):
     Promissory[-1].setHolderConsent({
         'from': _from,
@@ -35,6 +29,7 @@ def set_holder_consent(_from):
     })
     print('Holder consent saved!')
 
+# получение соглашения от векселедателя
 def set_debtor_consent(_from):
     Promissory[-1].setDebtorConsent({
         'from':_from,
@@ -42,6 +37,7 @@ def set_debtor_consent(_from):
     })
     print('Debtor consent saved!')
 
+# оплата векселя
 def pay_promissory(_from):
     Promissory[-1].payPromissory({
         'from': _from,
@@ -49,3 +45,11 @@ def pay_promissory(_from):
         'priority_fee': '2 gwei'
     })
     print('Promissory was paid!')
+
+# получение структуры с информацией о векселе через контаркт векселя
+def get_promissory_info(_from):
+    promissory_info = Promissory[-1].getPromissoryInfo({
+        'from': _from
+    })
+    print(f'Promissory info: {promissory_info}')
+    return promissory_info

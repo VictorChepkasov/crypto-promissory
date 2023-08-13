@@ -20,6 +20,4 @@ def test_pay_promissory(holder, debtor, promissory):
     set_holder_consent(holder)
     # оплата векселя
     pay_promissory(debtor)
-    promissoryAmount = promissory.promissory()[3]
-    print(f'promissoryAmount: {promissoryAmount}')
     assert debtorBalance > debtor.balance() 

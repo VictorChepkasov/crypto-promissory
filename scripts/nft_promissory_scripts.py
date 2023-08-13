@@ -7,21 +7,22 @@ def main():
     create_promissory(holder, accounts.add(config['wallets']['debtor_key']), 0, 1000, 1691694000)
 
 def deploy_promissory_nft(_from):
-    promissoryNFT_deploy_contract = PromissoryNFT.deploy({
+    promissory_nft_deployed = PromissoryNFT.deploy({
         "from": _from,
         'priority_fee': '2 gwei'
     })
-    print(f"Promissory NFT deployed at {promissoryNFT_deploy_contract}")
-    return promissoryNFT_deploy_contract
+    print(f"Promissory NFT deployed at {promissory_nft_deployed}")
+    return promissory_nft_deployed
 
-def create_promissory(_from, _debtor, _promissoryCommission, _promissoryAmount, _dateOfClose):
-    promissory_collection = PromissoryNFT[-1] 
+# Совздание контракта, метаданных и выпуск токена
+def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
+    promissory_nft = PromissoryNFT[-1] 
     # проверяем количество отчеканенных на данный момент токенов
-    existing_tokens = promissory_collection.tokenCounter()
+    existing_tokens = promissory_nft.tokenCounter()
     print(f'Existing tokens: {existing_tokens}')
 
-    # вызываем нашу функцию createCollectible, чтобы создать контракт sвекселя 
-    promissory_collection.createCollectible(_debtor, _promissoryCommission, _promissoryAmount, _dateOfClose, {
+    # вызываем нашу функцию createCollectible, чтобы создать контракт векселя 
+    promissory_nft.createCollectible(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
         'from': _from,
         "gas_limit": 2074045,
         "allow_revert": True
@@ -32,14 +33,14 @@ def create_promissory(_from, _debtor, _promissoryCommission, _promissoryAmount, 
     metadata_uri = create_metadata(_from)
 
     # выпускаем токен
-    tx = promissory_collection.mintCollectible(metadata_uri, {
+    promissory_nft.mintCollectible(metadata_uri, {
         'from': _from, 
         'priority_fee': '10 wei',
         "allow_revert": True
-    })
-    tx.wait(3)
+    }).wait(3)
     print('Token minted!')
 
+# Получение адреса контракта векселя по id, преобразовывается в ContractContainer через Contract.at(address)
 def get_promissory(_from, promissory_id):
     info = PromissoryNFT[-1].getPromissory(promissory_id, {
         'from': _from

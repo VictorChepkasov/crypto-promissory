@@ -1,4 +1,4 @@
-from brownie import PromissoryNFT, accounts, config
+from brownie import PromissoryNFT, Promissory, accounts, config
 from scripts.create_metadata import create_metadata
 
 def main():
@@ -14,12 +14,12 @@ def deploy_promissory_nft(_from):
     print(f"Promissory NFT deployed at {promissory_nft_deployed}")
     return promissory_nft_deployed
 
-# Получение адреса контракта векселя по id, преобразовывается в ContractContainer через Contract.at(address)
+# Получение адреса контракта векселя по id, 
 def get_promissory(_from, promissory_id):
     info = PromissoryNFT[-1].getPromissory(promissory_id, {
         'from': _from
     })
-    return info
+    return Promissory.at(info)
 
 # Создание контракта, метаданных и выпуск токена
 def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
@@ -90,3 +90,5 @@ def transfer_token(owner, to, token_id):
         'from': owner,
         'priority_fee': '10 wei'
     })
+    # promissory = get_promissory(to, token_id)
+    # promissory.promissory()[0] = to

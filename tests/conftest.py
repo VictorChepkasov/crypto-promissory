@@ -1,15 +1,21 @@
 import pytest
-from brownie import accounts, config
+from brownie import accounts, network
 from scripts.promissory_scripts import deploy_promissory
 from scripts.nft_promissory_scripts import deploy_promissory_nft
 
 @pytest.fixture(scope='session')
 def holder():
-    return accounts.load('victor')
+    if network.show_active() != 'development':
+        return accounts.load('victor')
+    else:
+        return accounts[0]
 
 @pytest.fixture(scope='session')
 def debtor():
-    return accounts.load('victor2')
+    if network.show_active() != 'development':
+        return accounts.load('victor2')
+    else:
+        return accounts[1]
 
 # получение контракта векселя
 @pytest.fixture

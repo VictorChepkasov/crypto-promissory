@@ -24,7 +24,8 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     # вызываем нашу функцию createCollectible, чтобы создать контракт векселя 
     promissory_nft.createCollectible(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
         'from': _from,
-        "gas_limit": 2074045
+        'priority_fee': '10 wei'
+        # "gas_limit": 2074045
     })
     print('Create collectible!')
 
@@ -35,8 +36,8 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     promissory_nft.mintCollectible(metadata_uri, {
         'from': _from, 
         'priority_fee': '10 wei',
-        "allow_revert": True
-    }).wait(3)
+        # "allow_revert": True
+    })
     print('Token minted!')
 
 # получение разрешения контракту передавать токен

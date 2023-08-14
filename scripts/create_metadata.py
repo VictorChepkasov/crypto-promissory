@@ -18,6 +18,10 @@ metadata_template = {
             "value": ""
         },
         {
+            "trait_type": "NFT id",
+            "value": ""
+        },
+        {
             "trait_type": "commission in percents",
             "value": ""
         },
@@ -67,7 +71,7 @@ def create_metadata(_from, token_id):
     promissory_info = get_promissory_info(_from, token_id)
     print(f'Promissory info: {promissory_info}')
     # сохраняем данные контракта в виде атрибутов
-    for index in range(10):
+    for index in range(11):
         metadata_template["attributes"][index]["value"] = str(promissory_info[index])
         
     # имя файла метаданных

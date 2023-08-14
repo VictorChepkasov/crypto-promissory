@@ -12,7 +12,7 @@ contract Promissory {
         //Владеющее векселем – векселедержателем.
         address payable holder; //адрес кошелька векселедержателем
         address debtor; //адрес кошелька векселедателя
-        // uint id;
+        uint id;
         uint256 promissoryCommission; //коммисия(в процентах), которая добавится к сумме долга 
         uint256 promissoryAmount; //сумма, нужная должнику
         uint256 dateOfRegistration; //дата составления векселя
@@ -26,6 +26,7 @@ contract Promissory {
     PromissoryInfo public promissory;
 
     constructor(
+        uint _id,
         address _holder,
         address payable _debtor,
         uint8 _promissoryCommission,
@@ -38,6 +39,7 @@ contract Promissory {
             "Debtor and Holder must be different persons"
         );
         isExist = true;
+        promissory.id = _id;
         promissory.debtor = _debtor;
         promissory.promissoryCommission = _promissoryCommission;
         promissory.promissoryAmount = _promissoryAmount + (_promissoryAmount / 100) * promissory.promissoryCommission;

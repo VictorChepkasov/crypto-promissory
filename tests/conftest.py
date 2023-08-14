@@ -14,7 +14,7 @@ def debtor():
 # получение контракта векселя
 @pytest.fixture
 def promissory(holder, debtor):
-    return deploy_promissory(holder, debtor, 10, 2000, 1692126000)
+    return deploy_promissory(1, holder, debtor, 10, 2000, 1692126000)
 
 # получение фабрики nft
 @pytest.fixture

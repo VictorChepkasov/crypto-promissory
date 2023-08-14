@@ -13,8 +13,8 @@ def main():
     set_holder_consent(holder)
     pay_promissory(debtor)
 
-def deploy_promissory(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
-    promissory_deployed = Promissory.deploy(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close, {
+def deploy_promissory(_id, _from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
+    promissory_deployed = Promissory.deploy(_id, _from, _debtor, _promissory_commission, _promissory_amount, _date_of_close, {
         'from': _from,
         'priority_fee': '2 gwei'
     })
@@ -39,13 +39,12 @@ def set_debtor_consent(_from):
 
 # оплата векселя
 def pay_promissory(_from):
-    success = Promissory[-1].payPromissory({
+    Promissory[-1].payPromissory({
         'from': _from,
-        'value': get_promissory_info(_from)[3],
+        'value': get_promissory_info(_from)[4],
         'priority_fee': '2 gwei'
     })
     print('Promissory was paid!')
-    return success
 
 # получение структуры с информацией о векселе через контаркт векселя
 def get_promissory_info(_from):

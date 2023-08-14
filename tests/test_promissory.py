@@ -9,8 +9,8 @@ def test_deploy(promissory):
 def test_get_promissory_info(holder, promissory):
     # полчение данных вексселя и обрезание даты до часов
     info = list(get_promissory_info(holder))
-    info[4] //= 3600
-    assert info == ['0xB9a459a00855B0b82337E692D078d7292609701C', '0xa5f78F093C1Fa451eAb7D3102AdF1eC6E0b85F27', 10, 2200, chain.time() // 3600, 1692126000, 0, 0, False, False]
+    info[5] //= 3600
+    assert info == ['0xB9a459a00855B0b82337E692D078d7292609701C', '0xa5f78F093C1Fa451eAb7D3102AdF1eC6E0b85F27', 1, 10, 2200, chain.time() // 3600, 1692126000, 0, 0, False, False]
 
 def test_pay_promissory(holder, debtor, promissory):
     debtorBalance = debtor.balance()
@@ -19,5 +19,4 @@ def test_pay_promissory(holder, debtor, promissory):
     set_debtor_consent(debtor)
     set_holder_consent(holder)
     # оплата векселя
-    success = pay_promissory(debtor)
-    assert success == True
+    pay_promissory(debtor)

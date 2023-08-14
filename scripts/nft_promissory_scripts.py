@@ -14,11 +14,12 @@ def deploy_promissory_nft(_from):
     print(f"Promissory NFT deployed at {promissory_nft_deployed}")
     return promissory_nft_deployed
 
-# Совздание контракта, метаданных и выпуск токена
+# Создание контракта, метаданных и выпуск токена
 def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
     promissory_nft = PromissoryNFT[-1] 
     # проверяем количество отчеканенных на данный момент токенов
-    print(f'Existing tokens: {promissory_nft.tokenCounter()}')
+    existing_tokens = promissory_nft.tokenCounter()
+    print(f'Existing tokens: {existing_tokens}')
 
     # вызываем нашу функцию createCollectible, чтобы создать контракт векселя 
     promissory_nft.createCollectible(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
@@ -28,7 +29,7 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     print('Create collectible!')
 
     # получаем хэш метаданных для URI этого токена
-    metadata_uri = create_metadata(_from, promissory_nft.tokenCounter())
+    metadata_uri = create_metadata(_from, existing_tokens+1)
 
     # выпускаем токен
     promissory_nft.mintCollectible(metadata_uri, {

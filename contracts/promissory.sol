@@ -53,7 +53,7 @@ contract Promissory {
     }
 
     //оплата векселя
-    function payPromissory() public payable onlyDebtor needConsent { 
+    function payPromissory() public payable onlyDebtor needConsent returns(bool) { 
         address payable holder = payable(promissory.holder);
         require(
             msg.value == promissory.promissoryAmount,
@@ -63,6 +63,7 @@ contract Promissory {
         require(success, 'Failed call!');
         promissoryPaid = true;
         setPaymentAccepted();
+        return true;
     }
 
     //В случае если обе стороны согласны, обозначается дата регистрации векселя

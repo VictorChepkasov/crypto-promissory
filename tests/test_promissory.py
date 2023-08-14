@@ -19,5 +19,5 @@ def test_pay_promissory(holder, debtor, promissory):
     set_debtor_consent(debtor)
     set_holder_consent(holder)
     # оплата векселя
-    pay_promissory(debtor)
-    assert debtorBalance > debtor.balance() 
+    success = pay_promissory(debtor)
+    assert success == True

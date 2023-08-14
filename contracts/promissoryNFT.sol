@@ -17,6 +17,7 @@ contract PromissoryNFT is ERC721URIStorage {
     /* Требования:
     * - Контракт должен существовать и находиться в мапинге. */
     function getPromissory(uint promissoryId) external view returns(Promissory) {
+        require(promissoryId != 0, "The promissory doesn't exist!");
         require(
             promissories[promissoryId].isExist(),
             "The promissory doesn't exist!"
@@ -39,7 +40,7 @@ contract PromissoryNFT is ERC721URIStorage {
         uint256 _promissoryAmount,
         uint256 _dateOfClose
     )
-        public returns(uint256)
+        public
     {
         Promissory promissory = new Promissory(
             msg.sender,
@@ -50,7 +51,6 @@ contract PromissoryNFT is ERC721URIStorage {
         );
         tokenCounter += 1;
         promissories[tokenCounter] = promissory;
-        return tokenCounter;
     }
 
     /* Требования:

@@ -18,19 +18,17 @@ def deploy_promissory_nft(_from):
 def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
     promissory_nft = PromissoryNFT[-1] 
     # проверяем количество отчеканенных на данный момент токенов
-    existing_tokens = promissory_nft.tokenCounter()
-    print(f'Existing tokens: {existing_tokens}')
+    print(f'Existing tokens: {promissory_nft.tokenCounter()}')
 
     # вызываем нашу функцию createCollectible, чтобы создать контракт векселя 
     promissory_nft.createCollectible(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
         'from': _from,
-        "gas_limit": 2074045,
-        "allow_revert": True
-    }).wait(1)
+        "gas_limit": 2074045
+    })
     print('Create collectible!')
 
     # получаем хэш метаданных для URI этого токена
-    metadata_uri = create_metadata(_from)
+    metadata_uri = create_metadata(_from, promissory_nft.tokenCounter())
 
     # выпускаем токен
     promissory_nft.mintCollectible(metadata_uri, {
@@ -50,8 +48,8 @@ def approve(_from, _to, token_id):
     })
 
 # Получение адреса контракта векселя по id, преобразовывается в ContractContainer через Contract.at(address)
-def get_promissory(_from, _to, promissory_id):
-    info = PromissoryNFT[-1].getPromissory(_to, promissory_id, {
+def get_promissory(_from, promissory_id):
+    info = PromissoryNFT[-1].getPromissory(promissory_id, {
         'from': _from
     })
     return info

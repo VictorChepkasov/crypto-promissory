@@ -52,27 +52,26 @@ metadata_template = {
         ]
     }
 
-def main():
-    create_metadata(accounts.add(config["wallets"]['from_key']))
+# def main():
+#     create_metadata(accounts.add(config["wallets"]['from_key']))
 
-def create_metadata(_from):
+def create_metadata(_from, token_id):
     # кол-во выпущеных токенов
-    existing_tokens = PromissoryNFT[-1].tokenCounter()
-    print(f'Existing tokens: {existing_tokens}')
+    print(f'Existing tokens: {token_id}')
     # копируем шаблон метаданных
     collectible_metadata = metadata_template.copy()
     # имя токена = его id
-    collectible_metadata["name"] = str(existing_tokens)
+    collectible_metadata["name"] = str(token_id)
 
     # получаем инфу о контракте
-    promissory_info = get_promissory_info(_from, existing_tokens)
+    promissory_info = get_promissory_info(_from, token_id)
     print(f'Promissory info: {promissory_info}')
     # сохраняем данные контракта в виде атрибутов
     for index in range(10):
         metadata_template["attributes"][index]["value"] = str(promissory_info[index])
         
     # имя файла метаданных
-    metadata_filename = f"./scripts/metadata/tokens/{existing_tokens}.json"
+    metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
     with open(metadata_filename, "w") as f:
         # Запишите метаданные локально
         json.dump(collectible_metadata, f)

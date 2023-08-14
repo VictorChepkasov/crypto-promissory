@@ -63,7 +63,8 @@ contract Promissory {
         );
         (bool success,) = holder.call{value: msg.value}("");
         require(success, 'Failed call!');
-        setPaymentAccepted();
+        paymentAccepted = true;
+        promissory.dateOfClose = block.timestamp;
     }
 
     //В случае если обе стороны согласны, обозначается дата регистрации векселя
@@ -83,13 +84,12 @@ contract Promissory {
         }
     }
 
-    //Принятие оплаты, что приводит к уничтожению контракта
-    //(все еще должна быть функция, которая сжигает токен, когда это делается) 
-    function setPaymentAccepted() public {
-        // require(promissoryPaid == true, "You must pay the amount promissory");
-        paymentAccepted = true;
-        promissory.dateOfClose = block.timestamp;
-    }
+    // //Принятие оплаты, что приводит к уничтожению контракта
+    // //(все еще должна быть функция, которая сжигает токен, когда это делается) 
+    // function setPaymentAccepted() public {
+    //     // require(promissoryPaid == true, "You must pay the amount promissory");
+        
+    // }
 
     //уничтожение контракта после его заключения
     function killContract() public {

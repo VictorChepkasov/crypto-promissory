@@ -35,7 +35,7 @@ contract PromissoryNFT is ERC721URIStorage {
         uint256 _promissoryAmount,
         uint256 _dateOfClose
     )
-        public
+        public 
     {
         Promissory promissory = new Promissory(
             tokenCounter+1,
@@ -49,15 +49,19 @@ contract PromissoryNFT is ERC721URIStorage {
         promissories[tokenCounter] = promissory;
     }
 
+    // Можно запихнуть createCollectible в эту функцию, так будет надёжнее
     /* Требования:
     * - `tokenId` не должен существовать. */
     function mintCollectible(string memory tokenURI) public {
         uint tokenId = tokenCounter;
+        (address holder,,,,,,,,,,) = promissories[tokenId].promissory();
+        require(msg.sender == holder, 'Only Holder!');
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenURI);
     }
 
     function burnCollectible(uint tokenId) public {
+        require(promissories[tokenId].paymentAccepted(), "Payment don't accepted!");
         _burn(tokenId);
     }
 

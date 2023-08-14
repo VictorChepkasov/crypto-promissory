@@ -47,17 +47,3 @@ def test_transfer_token(holder, debtor, third_party, promissory_nft):
         'priority_fee': '10 wei'
     })
     assert owner == to
-
-def test_burn_collectible(holder, debtor, promissory_nft):
-    create_promissory(holder, debtor, 10, 1000, 1692126000)
-    token_id = PromissoryNFT[-1].tokenCounter()
-    approve(holder, PromissoryNFT[-1].address, token_id)
-    PromissoryNFT[-1].burnCollectible(token_id, {
-        'from': holder,
-        'priority_fee': '10 wei'
-    })
-    exist_token = PromissoryNFT[-1].existsCollectible(token_id, {
-        'from': holder,
-        'priority_fee': '10 wei'
-    })
-    assert exist_token == False

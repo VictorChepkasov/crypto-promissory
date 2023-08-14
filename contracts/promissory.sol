@@ -2,9 +2,8 @@
 pragma solidity ^0.8.7;
 
 contract Promissory {
-    bool public promissoryPaid = false;
     bool public paymentAccepted = false;
-    bool public isExist;
+    bool public isExist = false;
 
     //данные векселя хранятся в этой структуре:
     struct PromissoryInfo {
@@ -50,12 +49,12 @@ contract Promissory {
     receive() external payable {}
 
     //Получение данных о векселе
-    function getPromissoryInfo() external view returns (PromissoryInfo memory) {
+    function getPromissoryInfo() external view returns(PromissoryInfo memory) {
         return promissory;
     }
 
     //оплата векселя
-    function payPromissory() public payable onlyDebtor needConsent returns(bool) { 
+    function payPromissory() public payable onlyDebtor needConsent { 
         address payable holder = payable(promissory.holder);
         require(
             msg.value == promissory.promissoryAmount,
@@ -63,9 +62,8 @@ contract Promissory {
         );
         (bool success,) = holder.call{value: msg.value}("");
         require(success, 'Failed call!');
-        promissoryPaid = true;
         setPaymentAccepted();
-        return true;
+        killContract();
     }
 
     //В случае если обе стороны согласны, обозначается дата регистрации векселя
@@ -87,15 +85,15 @@ contract Promissory {
 
     //Принятие оплаты, что приводит к уничтожению контракта
     //(все еще должна быть функция, которая сжигает токен, когда это делается) 
-    function setPaymentAccepted() internal promissoryWasPaid {
-        require(promissoryPaid == true, "You must pay the amount promissory");
+    function setPaymentAccepted() public {
+        // require(promissoryPaid == true, "You must pay the amount promissory");
         paymentAccepted = true;
         promissory.dateOfClose = block.timestamp;
-        killContract();
     }
 
     //уничтожение контракта после его заключения
-    function killContract() internal {
+    function killContract() public {
+        isExist = true;
         selfdestruct(promissory.holder);
     }
 
@@ -118,14 +116,6 @@ contract Promissory {
         require(
             promissory.debtorConsent && promissory.holderConsent,
             "Need conset for Holder and Debtor"
-        );
-        _;
-    }
-
-    modifier promissoryWasPaid() {
-        require(
-            promissoryPaid, 
-            "Payment must be made before withdrawing funds!"
         );
         _;
     }

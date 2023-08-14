@@ -47,7 +47,9 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
 def approve(_from, _to, token_id):
     PromissoryNFT[-1].approve(_to, token_id, {
         'from': _from,
+        'priority_fee': '10 wei'
     })
+    print('Approved!')
 
 # Получение адреса контракта векселя по id, преобразовывается в ContractContainer через Contract.at(address)
 def get_promissory(_from, promissory_id):
@@ -55,3 +57,11 @@ def get_promissory(_from, promissory_id):
         'from': _from
     })
     return info
+
+
+def pay_promissory(promissory, _from):
+    promissory.payPromissory({
+        'from': _from,
+        'value': '1100 wei',  
+        'priority_fee': '10 wei'
+    })

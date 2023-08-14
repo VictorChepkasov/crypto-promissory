@@ -13,6 +13,8 @@ contract PromissoryNFT is ERC721URIStorage {
     constructor() ERC721("Promissory NFT", "PMY") {
         tokenCounter = 0;
     }
+
+    receive() external payable {}
     
     /* Требования:
     * - Контракт должен существовать и находиться в мапинге. */
@@ -23,13 +25,6 @@ contract PromissoryNFT is ERC721URIStorage {
             "The promissory doesn't exist!"
         );
         return promissories[promissoryId];
-    }
-    /* Требования:
-    * - Контракт должен быть утверждённым оператором токена. */
-    function payPromissory(uint promissoryId) public payable {
-        Promissory promissory = promissories[promissoryId];
-        promissory.payPromissory();
-        burnCollectible(promissory, promissoryId);
     }
 
     /* Требования:
@@ -60,26 +55,5 @@ contract PromissoryNFT is ERC721URIStorage {
         uint tokenId = tokenCounter;
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenURI);
-    }
-
-    /* Требования:
-    * - вызывающий абонент должен владеть токеном или быть утвержденным оператором.
-    * - `tokenId` должен существовать. */
-    function burnCollectible(
-        Promissory promissory,
-        uint tokenId
-    )
-        internal isApprovedOrOwner(tokenId)
-    {
-        require(promissory.paymentAccepted(), "Payment not accepted!");
-        _burn(tokenId);
-    }    
-
-    modifier isApprovedOrOwner(uint tokenId) {
-        require(
-            _isApprovedOrOwner(address(this), tokenId),
-            "Caller is not token owner or approved"
-        );
-        _;
     }
 }

@@ -77,3 +77,9 @@ def pay_promissory(promissory, _from, token_id):
         'priority_fee': '10 wei'
     })
     return exist
+
+def transfer_token(owner, to, token_id):
+    PromissoryNFT[-1].transferFrom(owner, to, token_id, {
+        'from': owner,
+        'priority_fee': '10 wei'
+    })

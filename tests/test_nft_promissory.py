@@ -1,8 +1,14 @@
 import pytest
 from brownie import PromissoryNFT, Promissory, chain
 from conftest import *
-from scripts.nft_promissory_scripts import get_promissory, create_promissory, pay_promissory, approve
 from scripts.promissory_scripts import set_debtor_consent, set_holder_consent
+from scripts.nft_promissory_scripts import (
+    get_promissory,
+    create_promissory,
+    pay_promissory,
+    approve,
+    transfer_token
+)
 
 def test_nft_promissory_deploy(promissory_nft):
     assert promissory_nft.address != '0'
@@ -35,10 +41,7 @@ def test_transfer_token(holder, debtor, third_party, promissory_nft):
     token_id = PromissoryNFT[-1].tokenCounter()
     to = third_party if network.show_active() != 'development' else accounts[2]
     approve(holder, PromissoryNFT[-1].address, token_id)
-    PromissoryNFT[-1].transferFrom(holder, to, token_id, {
-        'from': holder,
-        'priority_fee': '10 wei'
-    })
+    transfer_token(holder, to, token_id)
     owner = PromissoryNFT[-1].ownerOf(token_id, {
         'from': to,
         'priority_fee': '10 wei'

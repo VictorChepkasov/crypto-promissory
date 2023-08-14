@@ -3,10 +3,10 @@ from brownie import PromissoryNFT, Promissory, chain
 from conftest import *
 from scripts.nft_promissory_scripts import get_promissory, create_promissory
 
-# def test_nft_promissory_deploy(promissory_nft):
-#     assert promissory_nft.address != '0'
+def test_nft_promissory_deploy(promissory_nft):
+    assert promissory_nft.address != '0'
 
-def test_get_promissory_token_info(holder, debtor):
+def test_get_promissory_token_info(holder, debtor, promissory_nft):
     create_promissory(holder, debtor, 0, 1000, 1692126000)
     promissory_contract = Promissory.at(get_promissory(
         holder, PromissoryNFT[-1].tokenCounter()

@@ -14,6 +14,13 @@ def deploy_promissory_nft(_from):
     print(f"Promissory NFT deployed at {promissory_nft_deployed}")
     return promissory_nft_deployed
 
+# Получение адреса контракта векселя по id, преобразовывается в ContractContainer через Contract.at(address)
+def get_promissory(_from, promissory_id):
+    info = PromissoryNFT[-1].getPromissory(promissory_id, {
+        'from': _from
+    })
+    return info
+
 # Создание контракта, метаданных и выпуск токена
 def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount, _date_of_close):
     promissory_nft = PromissoryNFT[-1] 
@@ -51,13 +58,9 @@ def approve(_from, _to, token_id):
     })
     print('Approved!')
 
-# Получение адреса контракта векселя по id, преобразовывается в ContractContainer через Contract.at(address)
-def get_promissory(_from, promissory_id):
-    info = PromissoryNFT[-1].getPromissory(promissory_id, {
-        'from': _from
-    })
-    return info
-
+# Оплата векселя
+# Требование:
+# - _from == debtor 
 def pay_promissory(promissory, _from, token_id):
     promissory.payPromissory({
         'from': _from,
@@ -78,6 +81,10 @@ def pay_promissory(promissory, _from, token_id):
     })
     return exist
 
+# Передача токена другому лицу (_to)
+# Требование:
+# - Разрешение распроряжаться токеном (approve) у передающего (owner)
+# - Токен должен сущствовать
 def transfer_token(owner, to, token_id):
     PromissoryNFT[-1].transferFrom(owner, to, token_id, {
         'from': owner,

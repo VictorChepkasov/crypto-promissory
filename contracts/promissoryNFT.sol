@@ -56,4 +56,12 @@ contract PromissoryNFT is ERC721URIStorage {
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenURI);
     }
+
+    function burnCollectible(uint tokenId) public {
+        _burn(tokenId);
+    }
+
+    function existsCollectible(uint tokenId) public view returns(bool) {
+        return _exists(tokenId);
+    }
 }

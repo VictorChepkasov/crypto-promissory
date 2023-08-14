@@ -58,10 +58,22 @@ def get_promissory(_from, promissory_id):
     })
     return info
 
-
-def pay_promissory(promissory, _from):
+def pay_promissory(promissory, _from, token_id):
     promissory.payPromissory({
         'from': _from,
         'value': '1100 wei',  
         'priority_fee': '10 wei'
     })
+    PromissoryNFT[-1].burnCollectible(token_id, {
+        'from': _from,
+        'priority_fee': '10 wei'
+    })
+    exist = PromissoryNFT[-1].existsCollectible(token_id, {
+        'from': _from,
+        'priority_fee': '10 wei'
+    })
+    promissory.killContract({
+        'from': _from,
+        'priority_fee': '10 wei'
+    })
+    return exist

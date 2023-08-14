@@ -63,7 +63,6 @@ contract Promissory {
         (bool success,) = holder.call{value: msg.value}("");
         require(success, 'Failed call!');
         setPaymentAccepted();
-        killContract();
     }
 
     //В случае если обе стороны согласны, обозначается дата регистрации векселя
@@ -93,6 +92,7 @@ contract Promissory {
 
     //уничтожение контракта после его заключения
     function killContract() public {
+        require(paymentAccepted, "Payment don't accepted!");
         isExist = true;
         selfdestruct(promissory.holder);
     }

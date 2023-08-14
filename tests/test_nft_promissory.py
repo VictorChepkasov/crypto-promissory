@@ -27,4 +27,33 @@ def test_pay_promissory(holder, debtor, promissory_nft):
     set_holder_consent(holder)
     token_id = PromissoryNFT[-1].tokenCounter()
     promissory = Promissory.at(get_promissory(debtor, token_id))
-    pay_promissory(promissory, debtor)
+    exist_token = pay_promissory(promissory, debtor, token_id)
+    assert exist_token == False
+
+def test_transfer_token(holder, debtor, promissory_nft):
+    create_promissory(holder, debtor, 10, 1000, 1692126000)
+    token_id = PromissoryNFT[-1].tokenCounter()
+    approve(holder, PromissoryNFT[-1].address, token_id)
+    PromissoryNFT[-1].transferFrom(holder, accounts[2], token_id, {
+        'from': holder,
+        'priority_fee': '10 wei'
+    })
+    owner = PromissoryNFT[-1].ownerOf(token_id, {
+        'from': holder,
+        'priority_fee': '10 wei'
+    })
+    assert owner == accounts[2]
+
+def test_burn_collectible(holder, debtor, promissory_nft):
+    create_promissory(holder, debtor, 10, 1000, 1692126000)
+    token_id = PromissoryNFT[-1].tokenCounter()
+    approve(holder, PromissoryNFT[-1].address, token_id)
+    PromissoryNFT[-1].burnCollectible(token_id, {
+        'from': holder,
+        'priority_fee': '10 wei'
+    })
+    exist_token = PromissoryNFT[-1].existsCollectible(token_id, {
+        'from': holder,
+        'priority_fee': '10 wei'
+    })
+    assert exist_token == False

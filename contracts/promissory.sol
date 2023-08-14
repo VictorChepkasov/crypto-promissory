@@ -42,6 +42,7 @@ contract Promissory {
         promissory.debtor = _debtor;
         promissory.promissoryCommission = _promissoryCommission;
         promissory.promissoryAmount = _promissoryAmount + (_promissoryAmount / 100) * promissory.promissoryCommission;
+        require(promissory.promissoryAmount > 0, "Incorrect promissory amount!");
         promissory.dateOfRegistration = block.timestamp;
         promissory.dateOfClose = _dateOfClose;
     }
@@ -93,7 +94,7 @@ contract Promissory {
     //уничтожение контракта после его заключения
     function killContract() public {
         require(paymentAccepted, "Payment don't accepted!");
-        isExist = true;
+        isExist = false;
         selfdestruct(promissory.holder);
     }
 

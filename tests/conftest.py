@@ -17,6 +17,14 @@ def debtor():
     else:
         return accounts[1]
 
+@pytest.fixture(scope='session')
+def third_party():
+    if network.show_active() != 'development':
+        return accounts.load('third_party')
+    else:
+        return accounts[2]
+
+
 # получение контракта векселя
 @pytest.fixture
 def promissory(holder, debtor):

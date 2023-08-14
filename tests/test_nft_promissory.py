@@ -30,19 +30,20 @@ def test_pay_promissory(holder, debtor, promissory_nft):
     exist_token = pay_promissory(promissory, debtor, token_id)
     assert exist_token == False
 
-def test_transfer_token(holder, debtor, promissory_nft):
+def test_transfer_token(holder, debtor, third_party, promissory_nft):
     create_promissory(holder, debtor, 10, 1000, 1692126000)
     token_id = PromissoryNFT[-1].tokenCounter()
+    to = third_party if network.show_active() != 'development' else accounts[2]
     approve(holder, PromissoryNFT[-1].address, token_id)
-    PromissoryNFT[-1].transferFrom(holder, accounts[2], token_id, {
+    PromissoryNFT[-1].transferFrom(holder, to, token_id, {
         'from': holder,
         'priority_fee': '10 wei'
     })
     owner = PromissoryNFT[-1].ownerOf(token_id, {
-        'from': holder,
+        'from': to,
         'priority_fee': '10 wei'
     })
-    assert owner == accounts[2]
+    assert owner == to
 
 def test_burn_collectible(holder, debtor, promissory_nft):
     create_promissory(holder, debtor, 10, 1000, 1692126000)

@@ -1,8 +1,8 @@
 import pytest
 from brownie import PromissoryNFT, chain
 from conftest import *
-from scripts.promissory_scripts import set_debtor_consent, set_holder_consent
-from scripts.nft_promissory_scripts import (
+from scripts.promissory import set_debtor_consent, set_holder_consent
+from scripts.nft_promissory import (
     get_promissory,
     create_promissory,
     pay_promissory,

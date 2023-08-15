@@ -45,6 +45,7 @@ metadata_template = {
             "trait_type": "date of debtor consent",
             "value": ""
         },
+        # согласия сторон вполне можно удалить, т.к. без них просто не заминтить токен (лжидается)
         {
             "trait_type": "holder consent",
             "value": ""
@@ -56,12 +57,13 @@ metadata_template = {
         ]
     }
 
-# def main():
+def main():
 #     create_metadata(accounts.add(config["wallets"]['from_key']))
+    update_metadata(1, [0, 6])
 
 def create_metadata(_from, token_id):
     # кол-во выпущеных токенов
-    print(f'Existing tokens: {token_id}')
+    print(f'Token id: {token_id}')
     # копируем шаблон метаданных
     collectible_metadata = metadata_template.copy()
     # имя токена = его id
@@ -78,17 +80,34 @@ def create_metadata(_from, token_id):
     metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
     with open(metadata_filename, "w") as f:
         # Запишите метаданные локально
-        json.dump(collectible_metadata, f)
+        json.dump(collectible_metadata, f, indent=4)
 
     # загрузка данных в ipfs(Pinata)
     metadata_hash = upload_to_ipfs(collectible_metadata)
     metadata_uri = f"<https://ipfs.io/ipfs/{metadata_hash}>"
  
     # добавляем uri в json файл   
-    write_to_json(metadata_uri)
+    with open('./scripts/metadata/metadata_hashes.json', 'r') as f:
+        json_file = json.load(f)
+    with open('./scripts/metadata/metadata_hashes.json', 'w') as ff:
+        json_file.append(metadata_uri)
+        json.dump(json_file, ff)
 
     print('Metadata created success!')
     return metadata_uri
+
+# token_id - id токена, метаданные которого будут обновляться
+# data - массив, где первый элемент адрес holder, а второй дата закрытия
+def update_metadata(token_id, data):
+    print(f'Token id: {token_id}')
+    metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
+    with open(metadata_filename, 'r') as f:
+        json_file = json.load(f)
+    with open(metadata_filename, 'w') as metadata_file:
+        for i in range(len(data)):
+            json_file["attributes"][i]['value'] = str(data[i])
+            print(json_file["attributes"][i]['value'])
+        json.dump(json_file, metadata_file)
 
 def upload_to_ipfs(data):
     endpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS"
@@ -120,12 +139,3 @@ def get_promissory_info(_from, token_id):
     # чистка promissory info
     promissory_info = str(promissory_info).translate(str.maketrans('', '', "()''")).split(', ')
     return promissory_info
-
-# функция записи uri метаданных в json файл
-def write_to_json(metadata_uri):
-    with open('./scripts/metadata/metadata_hashes.json', 'r') as f:
-        json_file = json.load(f)
-    with open('./scripts/metadata/metadata_hashes.json', 'w') as ff:
-        json_file.append(metadata_uri)
-        # print(json_file)
-        json.dump(json_file, ff)

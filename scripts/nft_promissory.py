@@ -1,5 +1,5 @@
 from brownie import PromissoryNFT, Promissory, accounts, config
-from scripts.create_metadata import create_metadata
+from scripts.metadata import create_metadata
 
 def main():
     holder = accounts.load('victor')

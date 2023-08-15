@@ -1,7 +1,7 @@
 import pytest
 from conftest import *
 from brownie import chain
-from scripts.promissory_scripts import get_promissory_info, pay_promissory, set_debtor_consent, set_holder_consent
+from scripts.promissory import get_promissory_info, pay_promissory, set_debtor_consent, set_holder_consent
 
 def test_deploy(promissory):
     assert promissory.address != '0'

@@ -1,7 +1,7 @@
 import pytest
 from brownie import accounts, network
-from scripts.promissory_scripts import deploy_promissory
-from scripts.nft_promissory_scripts import deploy_promissory_nft
+from scripts.promissory import deploy_promissory
+from scripts.nft_promissory import deploy_promissory_nft
 
 @pytest.fixture(scope='session')
 def holder():

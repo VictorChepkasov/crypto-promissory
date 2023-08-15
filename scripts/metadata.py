@@ -107,7 +107,7 @@ def update_metadata(token_id, data):
         for i in range(len(data)):
             json_file["attributes"][i]['value'] = str(data[i])
             print(json_file["attributes"][i]['value'])
-        json.dump(json_file, metadata_file)
+        json.dump(json_file, metadata_file, indent=4)
 
 def upload_to_ipfs(data):
     endpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS"

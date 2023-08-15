@@ -1,5 +1,6 @@
 from brownie import Promissory, accounts, config
 from dotenv import load_dotenv
+from scripts.metadata import update_metadata
 
 load_dotenv()
 

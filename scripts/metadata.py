@@ -44,15 +44,6 @@ metadata_template = {
         {
             "trait_type": "date of debtor consent",
             "value": ""
-        },
-        # согласия сторон вполне можно удалить, т.к. без них просто не заминтить токен (лжидается)
-        {
-            "trait_type": "holder consent",
-            "value": ""
-        },
-        {
-            "trait_type": "debtor consent",
-            "value": ""
         }
         ]
     }
@@ -73,8 +64,8 @@ def create_metadata(_from, token_id):
     promissory_info = get_promissory_info(_from, token_id)
     print(f'Promissory info: {promissory_info}')
     # сохраняем данные контракта в виде атрибутов
-    for index in range(11):
-        metadata_template["attributes"][index]["value"] = str(promissory_info[index])
+    for i in range(9):
+        metadata_template["attributes"][i]["value"] = str(promissory_info[i])
         
     # имя файла метаданных
     metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
@@ -98,15 +89,18 @@ def create_metadata(_from, token_id):
 
 # token_id - id токена, метаданные которого будут обновляться
 # data - массив, где первый элемент адрес holder, а второй дата закрытия
-def update_metadata(token_id, data):
+# Если один из элементов data равен None, то данные этогго атрибута не меняются
+def update_metadata(_from, token_id):
     print(f'Token id: {token_id}')
     metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
+    print(f'Metadata file: {metadata_filename}')
+    promissory_info = get_promissory_info(_from, token_id)
+    # Чтение и запись файла с обновлёнными таданными адреса и даты закрытия векселя
     with open(metadata_filename, 'r') as f:
         json_file = json.load(f)
     with open(metadata_filename, 'w') as metadata_file:
-        for i in range(len(data)):
-            json_file["attributes"][i]['value'] = str(data[i])
-            print(json_file["attributes"][i]['value'])
+        for i in range(9):
+            json_file["attributes"][i]['value'] = str(promissory_info[i])
         json.dump(json_file, metadata_file, indent=4)
 
 def upload_to_ipfs(data):
@@ -135,7 +129,9 @@ def get_promissory_info(_from, token_id):
     promissory_info = PromissoryNFT[-1].getPromissory(token_id, {
         'from': _from
     })
-    promissory_info = Promissory.at(promissory_info).getPromissoryInfo({'from': _from})
+    promissory_info = Promissory.at(promissory_info).getPromissoryInfo({
+        'from': _from
+    })
     # чистка promissory info
     promissory_info = str(promissory_info).translate(str.maketrans('', '', "()''")).split(', ')
     return promissory_info

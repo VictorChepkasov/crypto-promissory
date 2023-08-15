@@ -1,5 +1,5 @@
-from brownie import PromissoryNFT, Promissory, accounts, config
-from scripts.metadata import create_metadata
+from brownie import PromissoryNFT, Promissory, accounts, config, chain
+from scripts.metadata import create_metadata, update_metadata
 
 def main():
     holder = accounts.load('victor')
@@ -47,6 +47,24 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     })
     print('Token minted!')
 
+def set_holder_consent(_from, token_id):
+    promissory = get_promissory(_from, token_id)
+    promissory.setHolderConsent({
+        'from':_from,
+        'priority_fee': '0.2 gwei'
+    })
+    update_metadata(_from, token_id)
+    print('Holder consent saved!')
+
+def set_debtor_consent(_from, token_id):
+    promissory = get_promissory(_from, token_id)
+    promissory.setDebtorConsent({
+        'from':_from,
+        'priority_fee': '0.2 gwei'
+    })
+    update_metadata(_from, token_id)
+    print('Debtor consent saved!')
+
 # получение разрешения контракту передавать токен
 # _from - владелец токена
 # _to - лицо, которому даётся возможность управлять токеном
@@ -61,12 +79,14 @@ def approve(_from, _to, token_id):
 # Оплата векселя
 # Требование:
 # - _from == debtor 
-def pay_promissory(promissory, _from, token_id):
+def pay_promissory(_from, token_id):
+    promissory = get_promissory(_from, token_id)
     promissory.payPromissory({
         'from': _from,
         'value': '1100 wei',  
         'priority_fee': '10 wei'
     })
+    update_metadata(_from, token_id)
     PromissoryNFT[-1].burnCollectible(token_id, {
         'from': _from,
         'priority_fee': '10 wei'
@@ -95,3 +115,4 @@ def transfer_token(owner, to, token_id):
         'from': owner,
         'priority_fee': '10 wei'
     })
+    update_metadata(to, token_id)

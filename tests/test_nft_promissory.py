@@ -1,10 +1,11 @@
 import pytest
 from brownie import PromissoryNFT, chain
 from conftest import *
-from scripts.promissory import set_debtor_consent, set_holder_consent
 from scripts.nft_promissory import (
     get_promissory,
     create_promissory,
+    set_holder_consent,
+    set_debtor_consent,
     pay_promissory,
     approve,
     transfer_token
@@ -28,11 +29,10 @@ def test_get_promissory_token_info(holder, debtor, promissory_nft):
 
 def test_pay_promissory(holder, debtor, promissory_nft):
     create_promissory(holder, debtor, 10, 1000, 1692126000)
-    set_debtor_consent(debtor)
-    set_holder_consent(holder)
     token_id = PromissoryNFT[-1].tokenCounter()
-    promissory = get_promissory(debtor, token_id)
-    exist_token = pay_promissory(promissory, debtor, token_id)
+    set_holder_consent(holder, token_id)
+    set_debtor_consent(debtor, token_id)
+    exist_token = pay_promissory(debtor, token_id)
     assert exist_token == False
 
 def test_transfer_token(holder, debtor, third_party, promissory_nft):

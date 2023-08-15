@@ -90,5 +90,8 @@ def transfer_token(owner, to, token_id):
         'from': owner,
         'priority_fee': '10 wei'
     })
-    # promissory = get_promissory(to, token_id)
-    # promissory.promissory()[0] = to
+    promissory = get_promissory(owner, token_id)
+    promissory.setNewHolder(to, {
+        'from': owner,
+        'priority_fee': '10 wei'
+    })

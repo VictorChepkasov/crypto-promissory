@@ -1,5 +1,5 @@
 import pytest
-from brownie import PromissoryNFT, Promissory, chain
+from brownie import PromissoryNFT, chain
 from conftest import *
 from scripts.promissory_scripts import set_debtor_consent, set_holder_consent
 from scripts.nft_promissory_scripts import (
@@ -48,4 +48,6 @@ def test_transfer_token(holder, debtor, third_party, promissory_nft):
         'priority_fee': '10 wei'
     })
     assert owner == to
-    # assert get_promissory(to, token_id).promissory()[0] == to
+    newOwner = get_promissory(to, token_id).promissory()[0]
+    print(f'New Owner: {newOwner}')
+    assert newOwner == to

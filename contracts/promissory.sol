@@ -2,8 +2,8 @@
 pragma solidity ^0.8.7;
 
 contract Promissory {
-    bool public paymentAccepted = false;
-    bool public isExist = false;
+    bool public paymentAccepted = false; //принята ли оплата
+    bool public isExist = false; //существует ли вексель. Обновляется в конструкторе 
 
     //данные векселя хранятся в этой структуре:
     struct PromissoryInfo {
@@ -84,12 +84,9 @@ contract Promissory {
         }
     }
 
-    // //Принятие оплаты, что приводит к уничтожению контракта
-    // //(все еще должна быть функция, которая сжигает токен, когда это делается) 
-    // function setPaymentAccepted() public {
-    //     // require(promissoryPaid == true, "You must pay the amount promissory");
-        
-    // }
+    function setNewHolder(address newHolder) public onlyHolder {
+        promissory.holder = payable(newHolder);
+    }
 
     //уничтожение контракта после его заключения
     function killContract() public {

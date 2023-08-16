@@ -48,9 +48,8 @@ metadata_template = {
         ]
     }
 
-def main():
+# def main():
 #     create_metadata(accounts.add(config["wallets"]['from_key']))
-    update_metadata(1, [0, 6])
 
 def create_metadata(_from, token_id):
     # кол-во выпущеных токенов
@@ -102,22 +101,22 @@ def update_metadata(_from, token_id):
         for i in range(9):
             json_file["attributes"][i]['value'] = str(promissory_info[i])
         json.dump(json_file, metadata_file, indent=4)
+    #обновляю данные в Pinata
 
 def upload_to_ipfs(data):
-    endpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS"
-    pinata_api_key = os.environ.get("PINATA_API_KEY")
-    pinata_secret_api_key = os.environ.get("PINATA_API_SECRET")
+    endpoint = "https://api.pinata.cloud/pinning/pinJSONToIPFS"
     headers = {
-        'pinata_api_key': pinata_api_key,
-        'pinata_secret_api_key': pinata_secret_api_key
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": f'Bearer {os.environ.get("PINATA_API_JWT")}',
     }
-    encode_data = json.dumps(data, indent=2).encode('utf-8')
-    files = {
-        'file': encode_data
+    pinata_content = {
+        'pinataContent': json.dumps(data, indent=2),
+        'pinataMetadata': json.dumps({"name": "NAME"}, indent=2)
     }
 
     # запрос пин-кода в pinata
-    response = requests.post(endpoint, headers=headers, files=files)
+    response = requests.post(endpoint, headers=headers, json=pinata_content)
     # print(f'Response: {response.json()}')
     returned_hash_IPFS = response.json()['IpfsHash']
 

@@ -1,10 +1,11 @@
-from brownie import PromissoryNFT, Promissory, accounts, config, chain
+from brownie import PromissoryNFT, Promissory, accounts, chain
 from scripts.metadata import create_metadata, update_metadata
 
 def main():
     holder = accounts.load('victor')
+    debtor = accounts.load('victor2')
     # deploy_promissory_nft(holder)
-    create_promissory(holder, accounts.add(config['wallets']['debtor_key']), 0, 1000, 1691694000)
+    create_promissory(holder, debtor, 10, 1000, 1691694000)
 
 def deploy_promissory_nft(_from):
     promissory_nft_deployed = PromissoryNFT.deploy({

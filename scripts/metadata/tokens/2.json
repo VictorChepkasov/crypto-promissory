@@ -1,17 +1,17 @@
 {
-    "name": "1",
+    "name": "2",
     "attributes": [
         {
             "trait_type": "holder address",
-            "value": "0x2d1082F484FAF5Cd79EFE895a2E5c84Bd22e5b4a"
+            "value": "0xB9a459a00855B0b82337E692D078d7292609701C"
         },
         {
             "trait_type": "debtor address",
-            "value": "0x61201BAf1f6fB3d1d963B6E0EaE2a1f0b40EA4fD"
+            "value": "0xa5f78F093C1Fa451eAb7D3102AdF1eC6E0b85F27"
         },
         {
             "trait_type": "NFT id",
-            "value": "1"
+            "value": "2"
         },
         {
             "trait_type": "commission in percents",
@@ -23,11 +23,11 @@
         },
         {
             "trait_type": "date of registration",
-            "value": "1692196348"
+            "value": "1692197004"
         },
         {
             "trait_type": "date of close",
-            "value": "1692126000"
+            "value": "1691694000"
         },
         {
             "trait_type": "date of holder consent",

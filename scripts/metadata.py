@@ -48,8 +48,49 @@ metadata_template = {
         ]
     }
 
-# def main():
-#     create_metadata(accounts.add(config["wallets"]['from_key']))
+def main():
+    data = {
+    "name": "1",
+    "attributes": [
+        {
+            "trait_type": "holder address",
+            "value": "БУДУ"
+        },
+        {
+            "trait_type": "debtor address",
+            "value": "БРАТЬ"
+        },
+        {
+            "trait_type": "NFT id",
+            "value": "1"
+        },
+        {
+            "trait_type": "commission in percents",
+            "value": "ПЕЛЬМЕНИ"
+        },
+        {
+            "trait_type": "amount",
+            "value": "И КУШАТЬ"
+        },
+        {
+            "trait_type": "date of registration",
+            "value": "1692160516"
+        },
+        {
+            "trait_type": "date of close",
+            "value": "1692126000"
+        },
+        {
+            "trait_type": "date of holder consent",
+            "value": "0"
+        },
+        {
+            "trait_type": "date of debtor consent",
+            "value": "0"
+        }
+    ]
+}
+    update_pinata_metadata(data, 'Qmd61REBXVAvQybFR4Yex4KLkQRh92a8p9HkpCfvtsF9DY')
 
 def create_metadata(_from, token_id):
     # кол-во выпущеных токенов
@@ -73,6 +114,7 @@ def create_metadata(_from, token_id):
         json.dump(collectible_metadata, f, indent=4)
 
     # загрузка данных в ipfs(Pinata)
+    print(collectible_metadata)
     metadata_hash = upload_to_ipfs(collectible_metadata)
     metadata_uri = f"<https://ipfs.io/ipfs/{metadata_hash}>"
  
@@ -94,6 +136,7 @@ def update_metadata(_from, token_id):
     metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
     print(f'Metadata file: {metadata_filename}')
     promissory_info = get_promissory_info(_from, token_id)
+
     # Чтение и запись файла с обновлёнными таданными адреса и даты закрытия векселя
     with open(metadata_filename, 'r') as f:
         json_file = json.load(f)
@@ -101,7 +144,40 @@ def update_metadata(_from, token_id):
         for i in range(9):
             json_file["attributes"][i]['value'] = str(promissory_info[i])
         json.dump(json_file, metadata_file, indent=4)
+
     #обновляю данные в Pinata
+    hash_ipfs = 'Qmcu8hF3thcf6bcLtkjefhifg7xpboQEcSAnRsmccPmvCk'
+    endpoint = "https://api.pinata.cloud/pinning/hashMetadata"
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": f'Bearer {os.environ.get("PINATA_API_JWT")}'
+    }
+    hash_ipfs_json = {
+        "ipfsPinHash": hash_ipfs,
+        'pinataMetadata': json.dumps(json_file, indent=2)
+        }
+    response = requests.put(endpoint, headers=headers, json=hash_ipfs_json)
+    print(response.text)
+
+
+# Возможно, нужно пинить метаданные, а потом обновлять их
+# Что грузить как файл я понятия не имею, разве что иконку для кошелька
+def update_pinata_metadata(data, hash_ipfs):
+    endpoint = "https://api.pinata.cloud/pinning/hashMetadata"
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": f'Bearer {os.environ.get("PINATA_API_JWT")}'
+    }
+    hash_ipfs_json = {
+        "ipfsPinHash": hash_ipfs,
+        'pinataMetadata': json.dumps(data, indent=2)
+        }
+
+    response = requests.put(endpoint, headers=headers, json=hash_ipfs_json)
+
+    print(response.text)
 
 def upload_to_ipfs(data):
     endpoint = "https://api.pinata.cloud/pinning/pinJSONToIPFS"
@@ -112,12 +188,12 @@ def upload_to_ipfs(data):
     }
     pinata_content = {
         'pinataContent': json.dumps(data, indent=2),
-        'pinataMetadata': json.dumps({"name": "NAME"}, indent=2)
+        'pinataMetadata': json.dumps(data, indent=2)
     }
 
     # запрос пин-кода в pinata
     response = requests.post(endpoint, headers=headers, json=pinata_content)
-    # print(f'Response: {response.json()}')
+    print(f'Response: {response.json()}')
     returned_hash_IPFS = response.json()['IpfsHash']
 
     # возвращаем хэш ipfs, где хранятся все нужные данные

@@ -24,6 +24,36 @@ contract Promissory {
 
     PromissoryInfo public promissory;
 
+    event PaidPromissory(
+        uint indexed id,
+        uint indexed dateOfClose
+    );
+
+    event SetConent(
+        uint indexed id,
+        uint indexed dateOfRegistration,
+        address indexed holder,
+        address debtor
+    );
+
+    modifier onlyHolder() {
+        require(msg.sender == promissory.holder, "Only the Holder!");
+        _;
+    }
+
+    modifier onlyDebtor() {
+        require(msg.sender == promissory.debtor, "Only the Debtor!");
+        _;
+    }
+
+    modifier needConsent() {
+        require(
+            promissory.debtorConsent && promissory.holderConsent,
+            "Need conset for Holder and Debtor"
+        );
+        _;
+    }
+
     constructor(
         uint _id,
         address _holder,
@@ -65,6 +95,7 @@ contract Promissory {
         require(success, 'Failed call!');
         paymentAccepted = true;
         promissory.dateOfClose = block.timestamp;
+        emit PaidPromissory(promissory.id, promissory.dateOfClose);
     }
 
     //В случае если обе стороны согласны, обозначается дата регистрации векселя
@@ -98,23 +129,11 @@ contract Promissory {
     //обозначение даты регистрации
     function _setDateOfRegistration() private {
         promissory.dateOfRegistration = block.timestamp;
-    }
-
-    modifier onlyHolder() {
-        require(msg.sender == promissory.holder, "Only the Holder!");
-        _;
-    }
-
-    modifier onlyDebtor() {
-        require(msg.sender == promissory.debtor, "Only the Debtor!");
-        _;
-    }
-
-    modifier needConsent() {
-        require(
-            promissory.debtorConsent && promissory.holderConsent,
-            "Need conset for Holder and Debtor"
+        emit SetConent(
+            promissory.id,
+            promissory.dateOfRegistration,
+            promissory.holder,
+            promissory.debtor
         );
-        _;
     }
 }

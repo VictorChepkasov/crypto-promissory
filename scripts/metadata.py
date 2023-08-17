@@ -9,7 +9,7 @@ load_dotenv()
 metadata_template = {
     "name": "crypto-promise",
     "description": "",
-    "img": "",
+    "img": "https://ipfs.io/ipfs/QmPFQksqBbkF6o6qbVNHZGkEiZXro7Ji6vJ8SembbchDK5",
     "attributes": [
         {
             "trait_type": "Holder address",
@@ -56,15 +56,13 @@ metadata_template = {
         ]
     }
 
-# def main():
-
 def create_metadata(_from, token_id):
     # кол-во выпущеных токенов
     print(f'Token id: {token_id}')
     # копируем шаблон метаданных
     collectible_metadata = metadata_template.copy()
     # имя токена = его id
-    collectible_metadata["name"] = f"Cypto-promise {str(token_id)}"
+    collectible_metadata["name"] = f"Cypto-promise №{str(token_id)}"
 
     # получаем инфу о контракте
     promissory_info = get_promissory_info(_from, token_id)
@@ -72,7 +70,7 @@ def create_metadata(_from, token_id):
     # сохраняем данные контракта в виде атрибутов
     for i in range(9):
         metadata_template["attributes"][i]["value"] = str(promissory_info[i]) if type(metadata_template["attributes"][i]["value"]) == type('') else int(promissory_info[i])
-        
+    collectible_metadata["description"] = f"Crypto-promissory for ${promissory_info[4]}"
     # имя файла метаданных
     metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
     with open(metadata_filename, "w") as f:
@@ -112,7 +110,7 @@ def update_metadata(_from, token_id):
         json.dump(json_file, metadata_file, indent=4)
 
     #обновляю данные в Pinata
-    hash_ipfs = 'Qmcu8hF3thcf6bcLtkjefhifg7xpboQEcSAnRsmccPmvCk'
+    hash_ipfs = 'QmeccHuGmE9gXZLdbhKpBhTX8ajrwGszaV8QtRYUYxWtf7'
     endpoint = "https://api.pinata.cloud/pinning/hashMetadata"
     headers = {
         "accept": "application/json",
@@ -121,28 +119,9 @@ def update_metadata(_from, token_id):
     }
     hash_ipfs_json = {
         "ipfsPinHash": hash_ipfs,
-        'pinataMetadata': json.dumps(json_file, indent=2)
+        'keyvalues': json.dumps(json_file, indent=2)
         }
     response = requests.put(endpoint, headers=headers, json=hash_ipfs_json)
-    print(response.text)
-
-
-# Возможно, нужно пинить метаданные, а потом обновлять их
-# Что грузить как файл я понятия не имею, разве что иконку для кошелька
-def update_pinata_metadata(data, hash_ipfs):
-    endpoint = "https://api.pinata.cloud/pinning/hashMetadata"
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "authorization": f'Bearer {os.environ.get("PINATA_API_JWT")}'
-    }
-    hash_ipfs_json = {
-        "ipfsPinHash": hash_ipfs,
-        'pinataMetadata': json.dumps(data, indent=2)
-        }
-
-    response = requests.put(endpoint, headers=headers, json=hash_ipfs_json)
-
     print(response.text)
 
 def upload_to_ipfs(data):
@@ -154,14 +133,12 @@ def upload_to_ipfs(data):
     }
     pinata_content = {
         'pinataContent': json.dumps(data, indent=2),
-        'pinataMetadata': json.dumps(data, indent=2)
+        'pinataMetadata': json.dumps(data, indent=4)
     }
-
     # запрос пин-кода в pinata
     response = requests.post(endpoint, headers=headers, json=pinata_content)
     print(f'Response: {response.json()}')
     returned_hash_IPFS = response.json()['IpfsHash']
-
     # возвращаем хэш ipfs, где хранятся все нужные данные
     return returned_hash_IPFS
 

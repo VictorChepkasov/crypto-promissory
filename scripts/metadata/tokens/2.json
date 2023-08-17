@@ -1,19 +1,19 @@
 {
-    "name": "Cypto-promise \u21161",
+    "name": "Cypto-promise \u21162",
     "description": "Crypto-promissory for $1100",
     "img": "https://ipfs.io/ipfs/QmPFQksqBbkF6o6qbVNHZGkEiZXro7Ji6vJ8SembbchDK5",
     "attributes": [
         {
             "trait_type": "Holder address",
-            "value": "0x4133e84aabB1E2910CEd34Ea788a5F7E8a8bcA68"
+            "value": "0xB9a459a00855B0b82337E692D078d7292609701C"
         },
         {
             "trait_type": "Debtor address",
-            "value": "0x1425287520980a198DfCadCD684341C79fB814eD"
+            "value": "0xa5f78F093C1Fa451eAb7D3102AdF1eC6E0b85F27"
         },
         {
             "trait_type": "NFT id",
-            "value": "1"
+            "value": "2"
         },
         {
             "display_type": "number",
@@ -28,12 +28,12 @@
         {
             "display_type": "date",
             "trait_type": "Date of registration",
-            "value": 1692283798
+            "value": 1692284016
         },
         {
             "display_type": "date",
             "trait_type": "Date of close",
-            "value": 1693335600
+            "value": 1691694000
         },
         {
             "display_type": "date",

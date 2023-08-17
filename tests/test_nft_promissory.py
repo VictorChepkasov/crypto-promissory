@@ -15,7 +15,7 @@ def test_nft_promissory_deploy(promissory_nft):
     assert promissory_nft.address != '0'
 
 def test_get_promissory_token_info(holder, debtor, promissory_nft):
-    create_promissory(holder, debtor, 0, 1000, 1692126000)
+    create_promissory(holder, debtor, 0, 1000, 1693335600)
     token_id = PromissoryNFT[-1].tokenCounter()
     promissory_contract = get_promissory(holder, token_id)
     promissory_info = list(promissory_contract.promissory())
@@ -25,10 +25,10 @@ def test_get_promissory_token_info(holder, debtor, promissory_nft):
         debtorAddress = '0xa5f78F093C1Fa451eAb7D3102AdF1eC6E0b85F27'
     else:
         holderAddress, debtorAddress = accounts[0], accounts[1]
-    assert promissory_info == [holderAddress, debtorAddress, token_id, 0, 1000, chain.time() // 3600, 1692126000, 0, 0, False, False]
+    assert promissory_info == [holderAddress, debtorAddress, token_id, 0, 1000, chain.time() // 3600, 1693335600, 0, 0, False, False]
 
 def test_pay_promissory(holder, debtor, promissory_nft):
-    create_promissory(holder, debtor, 10, 1000, 1692126000)
+    create_promissory(holder, debtor, 10, 1000, 1693335600)
     token_id = PromissoryNFT[-1].tokenCounter()
     set_holder_consent(holder, token_id)
     set_debtor_consent(debtor, token_id)
@@ -36,7 +36,7 @@ def test_pay_promissory(holder, debtor, promissory_nft):
     assert exist_token == False
 
 def test_transfer_token(holder, debtor, third_party, promissory_nft):
-    create_promissory(holder, debtor, 10, 1000, 1692126000)
+    create_promissory(holder, debtor, 10, 1000, 1693335600)
     token_id = PromissoryNFT[-1].tokenCounter()
     # _to - лицо, которому передаётся вексель
     to = third_party if network.show_active() != 'development' else accounts[2]

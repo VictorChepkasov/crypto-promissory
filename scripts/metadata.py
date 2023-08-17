@@ -7,14 +7,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 metadata_template = {
-    "name": "",
+    "name": "crypto-promise",
+    "description": "",
+    "img": "",
     "attributes": [
         {
-            "trait_type": "holder address",
+            "trait_type": "Holder address",
             "value": ""
         },
         {
-            "trait_type": "debtor address",
+            "trait_type": "Debtor address",
             "value": ""
         },
         {
@@ -22,75 +24,39 @@ metadata_template = {
             "value": ""
         },
         {
-            "trait_type": "commission in percents",
-            "value": ""
+            "display_type": "number",
+            "trait_type": "Commission in percents",
+            "value": 0
         },
         {
-            "trait_type": "amount",
-            "value": ""
+            "display_type": "number",
+            "trait_type": "Amount to pay",
+            "value": 0
         },
         {
-            "trait_type": "date of registration",
-            "value": ""
+            "display_type": "date",
+            "trait_type": "Date of registration",
+            "value": 0
         },
         {
-            "trait_type": "date of close",
-            "value": ""
+            "display_type": "date",
+            "trait_type": "Date of close",
+            "value": 0
         },
         {
-            "trait_type": "date of holder consent",
-            "value": ""
+            "display_type": "date",
+            "trait_type": "Date of holder consent",
+            "value": 0
         },
         {
-            "trait_type": "date of debtor consent",
-            "value": ""
+            "display_type": "date",
+            "trait_type": "Date of debtor consent",
+            "value": 0
         }
         ]
     }
 
-def main():
-    data = {
-    "name": "1",
-    "attributes": [
-        {
-            "trait_type": "holder address",
-            "value": "БУДУ"
-        },
-        {
-            "trait_type": "debtor address",
-            "value": "БРАТЬ"
-        },
-        {
-            "trait_type": "NFT id",
-            "value": "1"
-        },
-        {
-            "trait_type": "commission in percents",
-            "value": "ПЕЛЬМЕНИ"
-        },
-        {
-            "trait_type": "amount",
-            "value": "И КУШАТЬ"
-        },
-        {
-            "trait_type": "date of registration",
-            "value": "1692160516"
-        },
-        {
-            "trait_type": "date of close",
-            "value": "1692126000"
-        },
-        {
-            "trait_type": "date of holder consent",
-            "value": "0"
-        },
-        {
-            "trait_type": "date of debtor consent",
-            "value": "0"
-        }
-    ]
-}
-    update_pinata_metadata(data, 'Qmd61REBXVAvQybFR4Yex4KLkQRh92a8p9HkpCfvtsF9DY')
+# def main():
 
 def create_metadata(_from, token_id):
     # кол-во выпущеных токенов
@@ -98,14 +64,14 @@ def create_metadata(_from, token_id):
     # копируем шаблон метаданных
     collectible_metadata = metadata_template.copy()
     # имя токена = его id
-    collectible_metadata["name"] = str(token_id)
+    collectible_metadata["name"] = f"Cypto-promise {str(token_id)}"
 
     # получаем инфу о контракте
     promissory_info = get_promissory_info(_from, token_id)
     print(f'Promissory info: {promissory_info}')
     # сохраняем данные контракта в виде атрибутов
     for i in range(9):
-        metadata_template["attributes"][i]["value"] = str(promissory_info[i])
+        metadata_template["attributes"][i]["value"] = str(promissory_info[i]) if type(metadata_template["attributes"][i]["value"]) == type('') else int(promissory_info[i])
         
     # имя файла метаданных
     metadata_filename = f"./scripts/metadata/tokens/{token_id}.json"
@@ -142,7 +108,7 @@ def update_metadata(_from, token_id):
         json_file = json.load(f)
     with open(metadata_filename, 'w') as metadata_file:
         for i in range(9):
-            json_file["attributes"][i]['value'] = str(promissory_info[i])
+            json_file["attributes"][i]['value'] = str(promissory_info[i]) if type(json_file["attributes"][i]['value']) == type('') else int(promissory_info[i])
         json.dump(json_file, metadata_file, indent=4)
 
     #обновляю данные в Pinata

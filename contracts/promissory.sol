@@ -25,12 +25,12 @@ contract Promissory {
     PromissoryInfo public promissory;
 
     event PaidPromissory(
-        uint indexed id,
+        uint id,
         uint indexed dateOfClose
     );
 
     event SetConent(
-        uint indexed id,
+        uint id,
         uint indexed dateOfRegistration,
         address indexed holder,
         address debtor

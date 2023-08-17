@@ -10,6 +10,8 @@ contract PromissoryNFT is ERC721URIStorage {
     uint256 public tokenCounter;
     mapping(uint => Promissory) promissories;
     
+    event CreateCollectible(uint id, address indexed holder, address indexed debtor);
+
     constructor() ERC721("Promissory NFT", "PMY") {
         tokenCounter = 0;
     }
@@ -47,15 +49,18 @@ contract PromissoryNFT is ERC721URIStorage {
         );
         tokenCounter += 1;
         promissories[tokenCounter] = promissory;
+        emit CreateCollectible(tokenCounter, msg.sender, _debtor);
     }
 
-    // Можно запихнуть createCollectible в эту функцию, так будет надёжнее
     /* Требования:
-    * - `tokenId` не должен существовать. */
+    * - `tokenId` не должен существовать
+    * - Согласие двух сторон с условиями векселя
+    */
     function mintCollectible(string memory tokenURI) public {
         uint tokenId = tokenCounter;
-        (address holder,,,,,,,,,,) = promissories[tokenId].promissory();
+        (address holder,,,,, uint dateOfRegistration,,,,,) = promissories[tokenId].promissory();
         require(msg.sender == holder, 'Only Holder!');
+        require(dateOfRegistration > 0, 'Need consent!');
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenURI);
     }

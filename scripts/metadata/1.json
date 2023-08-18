@@ -5,11 +5,11 @@
     "attributes": [
         {
             "trait_type": "Holder address",
-            "value": "0xB9a459a00855B0b82337E692D078d7292609701C"
+            "value": "0x1d9458A5F6A5207478207fA4e3C491A9B20d434F"
         },
         {
             "trait_type": "Debtor address",
-            "value": "0xa5f78F093C1Fa451eAb7D3102AdF1eC6E0b85F27"
+            "value": "0x6178FF3747b0d7B7D18CBeF99D82ed789CE05182"
         },
         {
             "trait_type": "NFT id",
@@ -28,12 +28,12 @@
         {
             "display_type": "date",
             "trait_type": "Date of registration",
-            "value": 1692350388
+            "value": 1692351515
         },
         {
             "display_type": "date",
             "trait_type": "Date of close",
-            "value": 1691694000
+            "value": 1693335600
         },
         {
             "display_type": "date",

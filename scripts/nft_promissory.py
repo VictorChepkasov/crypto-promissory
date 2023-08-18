@@ -1,10 +1,10 @@
-from brownie import PromissoryNFT, Promissory, accounts, chain
-from scripts.metadata import create_metadata, update_metadata
+from brownie import PromissoryNFT, Promissory, accounts
+from scripts.metadata import create_metadata
 
 def main():
     holder = accounts.load('victor')
     debtor = accounts.load('victor2')
-    # deploy_promissory_nft(holder)
+    deploy_promissory_nft(holder)
     create_promissory(holder, debtor, 10, 1000, 1691694000)
 
 def deploy_promissory_nft(_from):
@@ -33,18 +33,17 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     promissory_nft.createCollectible(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
         'from': _from,
         'priority_fee': '10 wei'
-        # "gas_limit": 2074045
     })
     print('Create collectible!')
 
     # получаем хэш метаданных для URI этого токена
     metadata_uri = create_metadata(_from, existing_tokens+1)
+    print(f'Metadata URI: {metadata_uri}')
 
     # выпускаем токен
     promissory_nft.mintCollectible(metadata_uri, {
         'from': _from, 
         'priority_fee': '10 wei',
-        # "allow_revert": True
     })
     print('Token minted!')
 
@@ -54,7 +53,6 @@ def set_holder_consent(_from, token_id):
         'from':_from,
         'priority_fee': '0.2 gwei'
     })
-    update_metadata(_from, token_id)
     print('Holder consent saved!')
 
 def set_debtor_consent(_from, token_id):
@@ -63,7 +61,6 @@ def set_debtor_consent(_from, token_id):
         'from':_from,
         'priority_fee': '0.2 gwei'
     })
-    update_metadata(_from, token_id)
     print('Debtor consent saved!')
 
 # получение разрешения контракту передавать токен
@@ -87,7 +84,7 @@ def pay_promissory(_from, token_id):
         'value': '1100 wei',  
         'priority_fee': '10 wei'
     })
-    update_metadata(_from, token_id)
+    # update_metadata(_from, token_id)
     PromissoryNFT[-1].burnCollectible(token_id, {
         'from': _from,
         'priority_fee': '10 wei'
@@ -116,4 +113,3 @@ def transfer_token(owner, to, token_id):
         'from': owner,
         'priority_fee': '10 wei'
     })
-    update_metadata(to, token_id)

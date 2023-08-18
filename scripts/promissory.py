@@ -1,15 +1,11 @@
-from brownie import Promissory, accounts, config
+from brownie import Promissory, accounts
 from dotenv import load_dotenv
-from scripts.metadata import update_metadata
-
 load_dotenv()
 
 def main():
-    # holder = accounts.add(config["wallets"]["from_key"])
     holder = accounts.load('victor')
     debtor = accounts.load('victor2')
     deploy_promissory(holder, debtor, 10, 200000, 1692126000)
-    # get_promissory_info(holder)
     set_debtor_consent(debtor)
     set_holder_consent(holder)
     pay_promissory(debtor)

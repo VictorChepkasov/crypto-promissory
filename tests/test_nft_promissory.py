@@ -1,14 +1,11 @@
 import pytest
 from brownie import PromissoryNFT, chain
 from conftest import *
-from scripts.nft_promissory import (
+from scripts.nft_promissory_class import *
+from scripts.token_scripts import (
     get_promissory,
     create_promissory,
-    set_holder_consent,
-    set_debtor_consent,
-    pay_promissory,
     approve,
-    transfer_token
 )
 
 def test_nft_promissory_deploy(promissory_nft):
@@ -30,18 +27,20 @@ def test_get_promissory_token_info(holder, debtor, promissory_nft):
 def test_pay_promissory(holder, debtor, promissory_nft):
     create_promissory(holder, debtor, 10, 1000, 1693335600)
     token_id = PromissoryNFT[-1].tokenCounter()
-    set_holder_consent(holder, token_id)
-    set_debtor_consent(debtor, token_id)
-    exist_token = pay_promissory(debtor, token_id)
+    promissory = Promissory(get_promissory(holder, token_id))
+    promissory.set_holder_consent(holder)
+    promissory.set_debtor_consent(debtor)
+    exist_token = promissory.pay_promissory(debtor)
     assert exist_token == False
 
 def test_transfer_token(holder, debtor, third_party, promissory_nft):
     create_promissory(holder, debtor, 10, 1000, 1693335600)
     token_id = PromissoryNFT[-1].tokenCounter()
+    promissory = Promissory(get_promissory(holder, token_id))
     # _to - лицо, которому передаётся вексель
     to = third_party if network.show_active() != 'development' else accounts[2]
     approve(holder, PromissoryNFT[-1].address, token_id)
-    transfer_token(holder, to, token_id)
+    promissory.transfer_token(to)
     # получение ненешнего владельца токена векселя
     owner = PromissoryNFT[-1].ownerOf(token_id, {
         'from': to,

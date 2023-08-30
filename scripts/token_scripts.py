@@ -30,14 +30,14 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     print(f'Existing tokens: {existing_tokens}')
 
     # вызываем нашу функцию createCollectible, чтобы создать контракт векселя 
-    promissory_nft.createCollectible(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
+    token_id = promissory_nft.createCollectible(_debtor, _promissory_commission, _promissory_amount, _date_of_close, {
         'from': _from,
         'priority_fee': '10 wei'
-    })
+    }).return_value
     print('Create collectible!')
 
     # получаем хэш метаданных для URI этого токена
-    metadata_uri = create_metadata(_from, existing_tokens+1)
+    metadata_uri = create_metadata(_from, token_id)
     print(f'Metadata URI: {metadata_uri}')
 
     # выпускаем токен
@@ -46,6 +46,7 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
         'priority_fee': '10 wei',
     })
     print('Token minted!')
+    return token_id
 
 # получение разрешения контракту передавать токен
 # _from - владелец токена

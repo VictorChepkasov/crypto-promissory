@@ -107,10 +107,10 @@ def upload_to_ipfs(data):
 
 # получение инфы о векселе из фабрики
 def get_promissory_info(_from, token_id):
-    promissory_info = PromissoryNFT[-1].getPromissory(token_id, {
+    promissory = PromissoryNFT[-1].getPromissory(token_id, {
         'from': _from
     })
-    promissory_info = Promissory.at(promissory_info).getPromissoryInfo({
+    promissory_info = Promissory.at(promissory).getPromissoryInfo({
         'from': _from
     })
     # чистка promissory info

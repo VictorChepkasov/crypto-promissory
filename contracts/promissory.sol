@@ -29,7 +29,7 @@ contract Promissory {
         uint indexed dateOfClose
     );
 
-    event SetConent(
+    event SetConsent(
         uint id,
         uint indexed dateOfRegistration,
         address indexed holder,
@@ -129,7 +129,7 @@ contract Promissory {
     //обозначение даты регистрации
     function _setDateOfRegistration() private {
         promissory.dateOfRegistration = block.timestamp;
-        emit SetConent(
+        emit SetConsent(
             promissory.id,
             promissory.dateOfRegistration,
             promissory.holder,

@@ -50,7 +50,6 @@ contract PromissoryNFT is ERC721URIStorage {
         );
         promissories[tokenId] = promissory;
         emit CreateCollectible(tokenId, msg.sender, _debtor);
-        
         return tokenId;
     }
 

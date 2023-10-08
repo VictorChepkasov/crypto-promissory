@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-contract Promissory {
+import "@openzeppelin/contracts/security/PullPayment.sol";
+
+contract Promissory is PullPayment {
     bool public paymentAccepted = false; //принята ли оплата
     bool public isExist = false; //существует ли вексель. Обновляется в конструкторе 
 
@@ -93,8 +95,9 @@ contract Promissory {
         );
         paymentAccepted = true;
         promissory.dateOfClose = block.timestamp;
-        (bool success,) = holder.call{value: msg.value}("");
-        require(success, 'Failed call!');
+        _asyncTransfer(holder, msg.value);
+        require(payments(holder) > 0, "No ethers to withdraw!");
+        withdrawPayments(payable(holder));
         emit PaidPromissory(promissory.id, promissory.dateOfClose);
     }
 

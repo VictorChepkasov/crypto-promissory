@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-import "../.deps/npm/@openzeppelin/contracts@4.8.1/token/ERC721/ERC721.sol";
-import "../.deps/npm/@openzeppelin/contracts@4.8.1/token/ERC721/extensions/ERC721URIStorage.sol";
-// import "../.deps/npm/@openzeppelin/contracts@4.8.1/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "./promissory.sol";
 
 contract PromissoryNFT is ERC721URIStorage {

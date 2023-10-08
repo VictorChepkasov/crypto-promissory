@@ -91,10 +91,10 @@ contract Promissory {
             msg.value == promissory.promissoryAmount,
             "Incorrect msg.value!"
         );
-        (bool success,) = holder.call{value: msg.value}("");
-        require(success, 'Failed call!');
         paymentAccepted = true;
         promissory.dateOfClose = block.timestamp;
+        (bool success,) = holder.call{value: msg.value}("");
+        require(success, 'Failed call!');
         emit PaidPromissory(promissory.id, promissory.dateOfClose);
     }
 

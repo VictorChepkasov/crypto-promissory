@@ -4,10 +4,12 @@ compiler:
   solc:
     remappings:
       - "@chainlink=smartcontractkit/chainlink-brownie-contracts@0.4.0"
-      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.3.2"
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.9.3"
+    version: 0.8.20
+    viaIR: True
 dependencies:
   - smartcontractkit/chainlink-brownie-contracts@0.4.0
-  - OpenZeppelin/openzeppelin-contracts@4.3.2
+  - OpenZeppelin/openzeppelin-contracts@4.9.3
 networks:
   default: development
   development:

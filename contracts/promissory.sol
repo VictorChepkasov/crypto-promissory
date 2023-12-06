@@ -2,6 +2,7 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/security/PullPayment.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
 contract Promissory is PullPayment {
     bool public paymentAccepted = false; //принята ли оплата
@@ -99,6 +100,63 @@ contract Promissory is PullPayment {
         require(payments(holder) > 0, "No ethers to withdraw!");
         withdrawPayments(payable(holder));
         emit PaidPromissory(promissory.id, promissory.dateOfClose);
+    }
+
+    function buildMetadata() public view returns(string memory) {
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name": "crypto-promise", "description": "It is Crypto-promissory", "image": "https://ipfs.io/ipfs/QmPFQksqBbkF6o6qbVNHZGkEiZXro7Ji6vJ8SembbchDK5"',
+                        '"attributes": ',
+                        "[",
+                        '{"trait_type": "Holder address"',
+                        '"value": "',
+                        promissory.holder,
+                        '"}',
+                        '{"trait_type": "Debtor address"',
+                        '"value": "',
+                        promissory.debtor,
+                        '"}',
+                        '{"trait_type": "NFT id"',
+                        '"value": "',
+                        promissory.id,
+                        '"}',
+                        '{"display_type": "number", "trait_type": "Commission in percents"',
+                        '"value": "',
+                        promissory.promissoryCommission,
+                        '"}',
+                        '{"display_type": "number", "trait_type": "Amount to pay"',
+                        '"value": "',
+                        promissory.promissoryAmount,
+                        '"}',
+                        '{"display_type": "date", "trait_type": "Date of registration"',
+                        '"value": "',
+                        promissory.dateOfRegistration,
+                        '"}',
+                        '{"display_type": "date", "trait_type": "Date of close"',
+                        '"value": "',
+                        promissory.dateOfClose,
+                        '"}',
+                        '{"display_type": "date", "trait_type": "Date of holder consent"',
+                        '"value": "',
+                        promissory.dateOfHolderConsent,
+                        '"}',
+                        '{"display_type": "date", "trait_type": "Date of debtor consent"',
+                        '"value": "',
+                        promissory.dateOfDebtorConsent,
+                        '"}',
+                        "]",
+                        "}"
+                    )
+                )
+            )
+        );
+
+        // Create token URI
+        return string(
+            abi.encodePacked("data:application/json;base64,", json)
+        );
     }
 
     //В случае если обе стороны согласны, обозначается дата регистрации векселя

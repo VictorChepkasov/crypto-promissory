@@ -36,12 +36,12 @@ def create_promissory(_from, _debtor, _promissory_commission, _promissory_amount
     }).return_value
     print('Create collectible!')
 
-    # получаем хэш метаданных для URI этого токена
-    metadata_uri = create_metadata(_from, token_id)
-    print(f'Metadata URI: {metadata_uri}')
+    # # получаем хэш метаданных для URI этого токена
+    # metadata_uri = create_metadata(_from, token_id)
+    # print(f'Metadata URI: {metadata_uri}')
 
     # выпускаем токен
-    promissory_nft.mintCollectible(metadata_uri, {
+    promissory_nft.mintCollectible({
         'from': _from, 
         'priority_fee': '10 wei',
     })

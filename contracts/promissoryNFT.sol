@@ -56,13 +56,24 @@ contract PromissoryNFT is ERC721URIStorage {
     * - `tokenId` не должен существовать
     * - Согласие двух сторон с условиями векселя
     */
-    function mintCollectible(string memory tokenURI) public {
+    function mintCollectible() public {
         uint tokenId = tokenCounter;
         (address holder,,,,, uint dateOfRegistration,,,,,) = promissories[tokenId].promissory();
         require(msg.sender == holder, 'Only Holder!');
         require(dateOfRegistration > 0, 'Need consent!');
+        string memory finalTokenURI = tokenURI(tokenId);
         _safeMint(msg.sender, tokenId);
-        _setTokenURI(tokenId, tokenURI);
+        _setTokenURI(tokenId, finalTokenURI);
+    }
+
+    function tokenURI(
+        uint256 promissoryId
+    )
+        public view override(ERC721URIStorage) returns (string memory) 
+    {
+        Promissory promissory = promissories[promissoryId];
+        // Create token URI
+        return promissory.buildMetadata();
     }
 
     function burnCollectible(uint tokenId) public {

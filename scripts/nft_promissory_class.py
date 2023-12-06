@@ -58,3 +58,7 @@ class Promissory:
             'from': self.holder,
             'priority_fee': '10 wei'
         })
+        PromissoryNFT[-1].tokenURI(self.token_id, {
+            'from': self.holder,
+            'priority_fee': '10 wei'
+        })
